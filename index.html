@@ -4539,7 +4539,7 @@
             </li>
 
             <li>
-                <a href="Prem_Artist.html">
+                <a href="index.html">
                     <img src="https://i.postimg.cc/Z5Y5rqkg/prem-art.png" alt="Художники">
                     Prem Artist
                 </a>
@@ -5462,13 +5462,16 @@
         // Текущий пользователь
         let currentUser = null;
 
+        // Ключ для синхронизации данных
+        const SYNC_STORAGE_KEY = 'artemisia_sync_data';
+
         // Проверка авторизации при загрузке страницы
         document.addEventListener('DOMContentLoaded', function () {
             checkAuthStatus();
+            initializeSyncSystem();
 
             // Инициализация каруселей
             initCarousel('artist1Works');
-
             initCarousel('artist3Works');
 
             // Инициализация фильтров
@@ -5489,6 +5492,117 @@
             // Инициализация модального окна изображений
             initImageModal();
         });
+
+        // ========== СИСТЕМА СИНХРОНИЗАЦИИ ДАННЫХ ==========
+
+        // Инициализация системы синхронизации
+        function initializeSyncSystem() {
+            console.log('🔄 Инициализация системы синхронизации данных...');
+
+            // Проверяем, есть ли данные для синхронизации
+            const syncData = localStorage.getItem(SYNC_STORAGE_KEY);
+            if (syncData) {
+                console.log('📦 Найдены данные синхронизации');
+                processSyncData(JSON.parse(syncData));
+            }
+
+            // Слушаем события изменения localStorage от других вкладок
+            window.addEventListener('storage', function (e) {
+                if (e.key === SYNC_STORAGE_KEY && e.newValue) {
+                    console.log('🔄 Получены обновленные данные синхронизации');
+                    processSyncData(JSON.parse(e.newValue));
+                }
+            });
+        }
+
+        // Обработка данных синхронизации
+        function processSyncData(syncData) {
+            if (!syncData || !syncData.users) return;
+
+            console.log(`👥 Обработка данных для ${Object.keys(syncData.users).length} пользователей`);
+
+            // Синхронизируем данные каждого пользователя
+            Object.entries(syncData.users).forEach(([username, userData]) => {
+                syncUserData(username, userData);
+            });
+
+            // Обновляем UI если текущий пользователь затронут
+            if (currentUser && syncData.users[currentUser.username]) {
+                console.log('🔄 Обновление данных текущего пользователя');
+                updateAuthUI();
+                if (document.getElementById('personalCabinetModal').style.display === 'block') {
+                    loadPersonalCabinetData();
+                }
+            }
+        }
+
+        // Синхронизация данных конкретного пользователя
+        function syncUserData(username, userData) {
+            // Синхронизируем профиль
+            if (userData.profile) {
+                localStorage.setItem(`userProfile_${username}`, JSON.stringify(userData.profile));
+            }
+
+            // Синхронизируем настройки пользователя
+            if (userData.settings) {
+                localStorage.setItem(`user_${username}`, JSON.stringify(userData.settings));
+            }
+
+            // Синхронизируем статус публикации
+            if (userData.publicationStatus !== undefined) {
+                localStorage.setItem(`profilePublished_${username}`, userData.publicationStatus.toString());
+            }
+        }
+
+        // Сохранение данных для синхронизации
+        function saveSyncData() {
+            const allUsers = getAllUsers();
+            const syncData = {
+                users: {},
+                lastUpdated: new Date().toISOString(),
+                version: '1.0'
+            };
+
+            // Собираем данные всех пользователей
+            allUsers.forEach(username => {
+                const userProfile = localStorage.getItem(`userProfile_${username}`);
+                const userSettings = localStorage.getItem(`user_${username}`);
+                const publicationStatus = localStorage.getItem(`profilePublished_${username}`);
+
+                syncData.users[username] = {
+                    profile: userProfile ? JSON.parse(userProfile) : null,
+                    settings: userSettings ? JSON.parse(userSettings) : null,
+                    publicationStatus: publicationStatus === 'true'
+                };
+            });
+
+            // Сохраняем данные синхронизации
+            localStorage.setItem(SYNC_STORAGE_KEY, JSON.stringify(syncData));
+            console.log('💾 Данные синхронизации сохранены');
+        }
+
+        // Получение всех пользователей в системе
+        function getAllUsers() {
+            const users = [];
+
+            // Ищем все ключи, начинающиеся с userProfile_
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('userProfile_')) {
+                    const username = key.replace('userProfile_', '');
+                    users.push(username);
+                }
+            });
+
+            return users;
+        }
+
+        // Обновление данных синхронизации при изменении пользовательских данных
+        function updateSyncData() {
+            saveSyncData();
+        }
+
+
+
 
         // Проверка статуса авторизации
         function checkAuthStatus() {
@@ -5616,6 +5730,7 @@
                 document.removeEventListener('click', closeProfileDropdownOnClickOutside);
             }
         }
+
 
         // Выход из системы
         function logout() {
@@ -5811,24 +5926,24 @@
             // Создаем красивое уведомление о успешной регистрации
             const notification = document.createElement('div');
             notification.style.cssText = `
-                position: fixed;
-                top: 20px;
-                right: 20px;
-                background: linear-gradient(45deg, #4CAF50, #45a049);
-                color: white;
-                padding: 15px 20px;
-                border-radius: 10px;
-                box-shadow: 0 5px 15px rgba(0,0,0,0.3);
-                z-index: 10000;
-                max-width: 300px;
-                font-family: "Comfortaa", sans-serif;
-                animation: slideInRight 0.5s ease-out;
-            `;
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(45deg, #4CAF50, #45a049);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 10px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        z-index: 10000;
+        max-width: 300px;
+        font-family: "Comfortaa", sans-serif;
+        animation: slideInRight 0.5s ease-out;
+    `;
 
             notification.innerHTML = `
-                <div style="font-weight: bold; margin-bottom: 5px;">🎉 Добро пожаловать!</div>
-                <div style="font-size: 0.9em;">Регистрация в Artemisia завершена успешно!</div>
-            `;
+        <div style="font-weight: bold; margin-bottom: 5px;">🎉 Добро пожаловать!</div>
+        <div style="font-size: 0.9em;">Регистрация в Artemisia завершена успешно!</div>
+    `;
 
             document.body.appendChild(notification);
 
@@ -5843,30 +5958,31 @@
             }, 5000);
         }
 
+
         // Добавляем CSS анимации для уведомления
         const style = document.createElement('style');
         style.textContent = `
-            @keyframes slideInRight {
-                from {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-                to {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-            }
-            @keyframes slideOutRight {
-                from {
-                    transform: translateX(0);
-                    opacity: 1;
-                }
-                to {
-                    transform: translateX(100%);
-                    opacity: 0;
-                }
-            }
-        `;
+    @keyframes slideInRight {
+        from {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateX(0);
+            opacity: 1;
+        }
+    }
+    @keyframes slideOutRight {
+        from {
+            transform: translateX(0);
+            opacity: 1;
+        }
+        to {
+            transform: translateX(100%);
+            opacity: 0;
+        }
+    }
+`;
         document.head.appendChild(style);
 
         // ОСНОВНАЯ ФУНКЦИЯ РЕГИСТРАЦИИ
@@ -5942,6 +6058,27 @@
             return users;
         }
 
+
+        // Функция для получения всех зарегистрированных пользователей
+        function getRegisteredUsers() {
+            const users = [];
+            Object.keys(localStorage).forEach(key => {
+                if (key.startsWith('user_') && key !== 'currentUser') {
+                    try {
+                        const userData = JSON.parse(localStorage.getItem(key));
+                        users.push({
+                            id: key.replace('user_', ''),
+                            username: userData.username,
+                            profileName: userData.profileName
+                        });
+                    } catch (e) {
+                        console.error('Ошибка при чтении пользователя:', key, e);
+                    }
+                }
+            });
+            return users;
+        }
+
         // ФУНКЦИЯ ВХОДА
         function submitLogin(event) {
             event.preventDefault();
@@ -5965,18 +6102,25 @@
                     const userData = {
                         username: username,
                         registrationDate: new Date().toISOString(),
-                        profileComplete: true
+                        profileComplete: true,
+                        lastLogin: new Date().toISOString(),
+                        device: getDeviceInfo()
                     };
 
                     localStorage.setItem('currentUser', JSON.stringify(userData));
                     currentUser = userData;
+
+                    // СИНХРОНИЗАЦИЯ: Загружаем актуальные данные пользователя
+                    loadUserDataFromSync(username);
+
                     updateAuthUI();
 
-                    showLoginMessage('Вход выполнен успешно!', 'success');
+                    showLoginMessage('Вход выполнен успешно! Загружаем ваши данные...', 'success');
 
                     // Закрываем модальное окно через 1.5 секунды
                     setTimeout(() => {
                         closeLoginModal();
+                        showProfileSuccess(`Добро пожаловать, ${username}! Ваши данные синхронизированы.`);
                     }, 1500);
                 } else {
                     showLoginMessage('Неверный логин или пароль', 'error');
@@ -5985,6 +6129,48 @@
                 }
             }, 1500);
         }
+
+        // Загрузка данных пользователя из системы синхронизации
+        function loadUserDataFromSync(username) {
+            const syncData = localStorage.getItem(SYNC_STORAGE_KEY);
+
+            if (syncData) {
+                const parsedData = JSON.parse(syncData);
+
+                if (parsedData.users && parsedData.users[username]) {
+                    const userData = parsedData.users[username];
+                    console.log(`📥 Загрузка данных пользователя ${username} из синхронизации`);
+
+                    // Восстанавливаем профиль
+                    if (userData.profile) {
+                        localStorage.setItem(`userProfile_${username}`, JSON.stringify(userData.profile));
+                    }
+
+                    // Восстанавливаем настройки
+                    if (userData.settings) {
+                        localStorage.setItem(`user_${username}`, JSON.stringify(userData.settings));
+                    }
+
+                    // Восстанавливаем статус публикации
+                    if (userData.publicationStatus !== undefined) {
+                        localStorage.setItem(`profilePublished_${username}`, userData.publicationStatus.toString());
+                    }
+                }
+            }
+        }
+
+        // Получение информации об устройстве
+        function getDeviceInfo() {
+            return {
+                userAgent: navigator.userAgent,
+                platform: navigator.platform,
+                language: navigator.language,
+                screen: `${screen.width}x${screen.height}`,
+                timestamp: new Date().toISOString()
+            };
+        }
+
+
 
         // ========== ИНСТРУКЦИИ ДЛЯ МОДЕРАТОРОВ ==========
 
@@ -8457,9 +8643,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
         window.addEventListener('resize', function () {
             updateAuthUI();
         });
-    </script>
 
-    <script>
         // ========== ФУНКЦИИ ДЛЯ СТАТУСА ПУБЛИКАЦИИ ПРОФИЛЯ ==========
 
         // Функция для проверки статуса публикации профиля
@@ -8805,7 +8989,8 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
                 profileName: profileData.profileName,
                 profileNickname: profileData.profileNickname,
                 hasPassword: true,
-                isNewProfile: !existingUserId
+                isNewProfile: !existingUserId,
+                lastSync: new Date().toISOString()
             };
 
             localStorage.setItem('currentUser', JSON.stringify(userData));
@@ -8813,6 +8998,9 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
 
             // Обновляем текущего пользователя
             currentUser = userData;
+
+            // СИНХРОНИЗАЦИЯ: Сохраняем данные для синхронизации
+            updateSyncData();
 
             // Обновляем UI
             updateAuthUI();
@@ -8823,9 +9011,9 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             // Показываем сообщение об успехе
             setTimeout(() => {
                 if (existingUserId) {
-                    showProfileSuccess('✅ Профиль успешно обновлен! ID остался прежним.');
+                    showProfileSuccess('✅ Профиль успешно обновлен! ID остался прежним. Данные синхронизированы.');
                 } else {
-                    showProfileSuccess('✅ Профиль успешно создан! Отправьте код модераторам для публикации.');
+                    showProfileSuccess('✅ Профиль успешно создан! Отправьте код модераторам для публикации. Данные синхронизированы.');
                 }
 
                 saveBtn.disabled = false;
@@ -8841,6 +9029,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             // Помечаем устройство как использованное для регистрации
             localStorage.setItem('device_registered', 'true');
         }
+
 
 
 
@@ -9116,6 +9305,10 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             if (userId && password) {
                 moderatorPasswords[userId] = password;
                 console.log(`Пароль для пользователя ${userId} добавлен модератором`);
+
+                // СИНХРОНИЗАЦИЯ: Обновляем данные синхронизации при изменении пароля
+                updateSyncData();
+
                 return true;
             }
             return false;
@@ -9125,6 +9318,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
         function verifyUserPassword(username, password) {
             return moderatorPasswords[username] === password;
         }
+
 
         // Функция для получения списка пользователей без паролей
         function getUsersWithoutPasswords() {
