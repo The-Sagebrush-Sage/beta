@@ -3165,6 +3165,53 @@
             }
         }
 
+        @media (max-width: 768px) {
+
+            /* Скрываем стрелки навигации в модальных окнах изображений */
+            .modal-nav-btn,
+            .works-control,
+            .profile-works-modal-nav,
+            .cabinet-fullscreen-nav {
+                display: none !important;
+            }
+
+            /* Увеличиваем область для свайпа */
+            .image-modal-img,
+            .profile-works-modal-img,
+            .cabinet-fullscreen-img {
+                cursor: default;
+            }
+
+            /* Улучшаем отображение на мобильных */
+            .image-modal-content,
+            .profile-works-modal-content,
+            .cabinet-fullscreen-content {
+                padding: 10px;
+            }
+        }
+
+        /* Дополнительные улучшения для мобильного UX */
+        @media (max-width: 480px) {
+
+            .image-close-btn,
+            .profile-works-modal-close,
+            .cabinet-fullscreen-close {
+                top: 10px;
+                right: 10px;
+                width: 35px;
+                height: 35px;
+                font-size: 24px;
+            }
+
+            .image-counter,
+            .profile-works-modal-counter,
+            .cabinet-fullscreen-counter {
+                bottom: 10px;
+                font-size: 12px;
+                padding: 3px 10px;
+            }
+        }
+
         /* Стили для полноэкранного просмотра работ в модальном окне регистрации */
         .profile-works-modal {
             display: none;
@@ -4437,56 +4484,6 @@
         .register-btn.registered:hover {
             background: linear-gradient(45deg, #45a049, #4CAF50) !important;
         }
-
-        /* Стили для статусов публикации */
-        .publication-status {
-            position: absolute;
-            top: 0;
-            right: 0;
-            padding: 15px;
-            background: rgba(255, 152, 0, 0.1);
-            border-radius: 8px;
-            border-left: 3px solid #ff9800;
-            max-width: 280px;
-            text-align: right;
-        }
-
-        .publication-status.published {
-            background: rgba(76, 175, 80, 0.1);
-            border-left-color: #4CAF50;
-        }
-
-        .publication-status .status-text {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: #ff9800;
-            font-weight: bold;
-            font-size: 0.9em;
-            justify-content: flex-end;
-        }
-
-        .publication-status.published .status-text {
-            color: #4CAF50;
-        }
-
-        .published-works-count {
-            margin: 15px 0;
-        }
-
-        /* Адаптация для мобильных */
-        @media (max-width: 768px) {
-            .publication-status {
-                position: static;
-                margin-top: 15px;
-                text-align: center;
-                max-width: 100%;
-            }
-
-            .publication-status .status-text {
-                justify-content: center;
-            }
-        }
     </style>
 
 </head>
@@ -4527,9 +4524,9 @@
 
             <!-- Кнопки авторизации для ПК -->
             <div class="header-auth">
-                <button class="auth-btn login-btn" onclick="openLoginModal()">Войти</button>
-                <button class="auth-btn register-btn" onclick="openRegistrationModal()" data-default-text="Регистрация"
-                    data-alternate-text="Войти">
+                <button href="?modal=login" class="auth-btn login-btn" onclick="openLoginModal()">Войти</button>
+                <button href="?modal=register" class="auth-btn register-btn" onclick="openRegistrationModal()"
+                    data-default-text="Регистрация" data-alternate-text="Войти">
                     Регистрация
                 </button>
             </div>
@@ -4574,9 +4571,9 @@
 
         <!-- Кнопки авторизации для мобильных -->
         <div class="mobile-auth" id="mobileAuth">
-            <button class="auth-btn login-btn" onclick="openLoginModal()">Войти</button>
-            <button class="auth-btn register-btn" onclick="openRegistrationModal()" data-default-text="Регистрация"
-                data-alternate-text="Войти">
+            <button href="?modal=login" class="auth-btn login-btn" onclick="openLoginModal()">Войти</button>
+            <button href="?modal=register" class="auth-btn register-btn" onclick="openRegistrationModal()"
+                data-default-text="Регистрация" data-alternate-text="Войти">
                 Регистрация
             </button>
         </div>
@@ -4793,13 +4790,13 @@
                 <div id="loginMessage" class="message"></div>
             </form>
 
-            <div class="instructions">
+            <div class="instructions" style="text-align: center;">
                 <h4 class="instructions-title">Нет аккаунта?</h4>
                 <p style="color: #e0e0e0; margin-top: 10px; text-align: center;">
                     Зарегистрируйтесь, чтобы получить доступ ко всем возможностям Artemisia
                 </p>
                 <button class="submit-btn"
-                    style="background: transparent; border: 2px solid #ffcc00; color: #ffcc00; margin-top: 10px;"
+                    style="background: transparent; border: 2px solid #ffcc00; color: #ffcc00; margin-top: 10px; display: block; margin-left: auto; margin-right: auto;"
                     onclick="closeLoginModal(); openRegistrationModal();">
                     Зарегистрироваться
                 </button>
@@ -5008,6 +5005,7 @@
     <div id="profileWorksModal" class="profile-works-modal">
         <span class="profile-works-modal-close" onclick="closeProfileWorksModal()">&times;</span>
         <div class="profile-works-modal-content">
+            <!-- СТРЕЛКИ СКРЫТЫ НА МОБИЛЬНЫХ ЧЕРЕЗ CSS -->
             <button class="profile-works-modal-nav profile-works-modal-prev"
                 onclick="navigateProfileWork(-1)">&#10094;</button>
             <img id="profileWorksModalImg" class="profile-works-modal-img" src="" alt="Работа">
@@ -5191,6 +5189,7 @@
     <div id="cabinetFullscreenModal" class="cabinet-fullscreen-modal">
         <span class="cabinet-fullscreen-close" onclick="closeCabinetFullscreenModal()">&times;</span>
         <div class="cabinet-fullscreen-content">
+            <!-- СТРЕЛКИ СКРЫТЫ НА МОБИЛЬНЫХ ЧЕРЕЗ CSS -->
             <button class="cabinet-fullscreen-nav cabinet-fullscreen-prev"
                 onclick="navigateCabinetWork(-1)">&#10094;</button>
             <img id="cabinetFullscreenImg" class="cabinet-fullscreen-img" src="" alt="Работа">
@@ -5412,16 +5411,19 @@
 
     </section>
 
+
     <!-- Image Modal - ОБНОВЛЕННАЯ ВЕРСИЯ -->
     <div id="imageModal" class="image-modal">
         <span class="image-close-btn" onclick="closeImageModal()">&times;</span>
         <div class="image-modal-content" id="imageModalContent">
+            <!-- СТРЕЛКИ СКРЫТЫ НА МОБИЛЬНЫХ ЧЕРЕЗ CSS -->
             <button class="modal-nav-btn modal-prev" onclick="navigateImage(-1)">&#10094;</button>
             <img id="expandedImg" class="image-modal-img" src="" alt="Expanded Image">
             <button class="modal-nav-btn modal-next" onclick="navigateImage(1)">&#10095;</button>
             <div class="image-counter" id="imageCounter"></div>
         </div>
     </div>
+
 
     <!-- Footer -->
     <footer class="footer-container">
@@ -5512,33 +5514,7 @@
         // Текущий пользователь
         let currentUser = null;
 
-        // Проверка авторизации при загрузке страницы
-        document.addEventListener('DOMContentLoaded', function () {
-            checkAuthStatus();
 
-            // Инициализация каруселей
-            initCarousel('artist1Works');
-
-            initCarousel('artist3Works');
-
-            // Инициализация фильтров
-            initFilters();
-
-            // Добавляем класс к первому элементу "Все стили"
-            const firstFilter = document.querySelector('.filters-dropdown a:first-child');
-            if (firstFilter) firstFilter.classList.add('active-filter');
-
-            // Адаптация каруселей при изменении размера окна
-            window.addEventListener('resize', () => {
-                Object.keys(carouselStates).forEach(worksInnerId => {
-                    carouselStates[worksInnerId].currentTranslate = 0;
-                    setPosition(worksInnerId);
-                });
-            });
-
-            // Инициализация модального окна изображений
-            initImageModal();
-        });
 
         // Проверка статуса авторизации
         function checkAuthStatus() {
@@ -5919,6 +5895,189 @@
         `;
         document.head.appendChild(style);
 
+
+        // ========== ОБРАБОТКА URL-ПАРАМЕТРОВ ДЛЯ ОТКРЫТИЯ МОДАЛЬНЫХ ОКОН ==========
+
+        // Функция для получения параметров из URL
+        function getUrlParameter(name) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            const regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)');
+            const results = regex.exec(window.location.href);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        // Функция для открытия модальных окон по параметрам URL
+        function openModalFromUrl() {
+            const modalParam = getUrlParameter('modal');
+
+            if (modalParam === 'login') {
+                openLoginModal();
+            } else if (modalParam === 'register') {
+                openRegistrationModal();
+            } else if (modalParam === 'profile') {
+                openProfileSetupModal();
+            } else if (modalParam === 'cabinet') {
+                openPersonalCabinetModal();
+            }
+        }
+
+        // Функция для обновления URL без перезагрузки страницы
+        function updateUrl(parameters) {
+            const url = new URL(window.location);
+
+            // Удаляем существующие параметры модальных окон
+            const paramsToRemove = ['modal', 'action', 'tab'];
+            paramsToRemove.forEach(param => {
+                url.searchParams.delete(param);
+            });
+
+            // Добавляем новые параметры
+            Object.keys(parameters).forEach(key => {
+                if (parameters[key]) {
+                    url.searchParams.set(key, parameters[key]);
+                }
+            });
+
+            window.history.replaceState({}, '', url);
+        }
+
+        // Функция для генерации ссылок с параметрами
+        function generateModalLink(modalType) {
+            const url = new URL(window.location);
+            url.searchParams.set('modal', modalType);
+            return url.toString();
+        }
+
+        // Обновляем функции открытия модальных окон
+        function openRegistrationModalWithUrl() {
+            openRegistrationModal();
+            updateUrl({ modal: 'register' });
+        }
+
+        function openLoginModalWithUrl() {
+            openLoginModal();
+            updateUrl({ modal: 'login' });
+        }
+
+        function openProfileSetupModalWithUrl() {
+            openProfileSetupModal();
+            updateUrl({ modal: 'profile' });
+        }
+
+        function openPersonalCabinetModalWithUrl() {
+            openPersonalCabinetModal();
+            updateUrl({ modal: 'cabinet' });
+        }
+
+        // Обновляем функции закрытия модальных окон
+        function closeRegistrationModalWithUrl() {
+            closeRegistrationModal();
+            updateUrl({});
+        }
+
+        function closeLoginModalWithUrl() {
+            closeLoginModal();
+            updateUrl({});
+        }
+
+        function closeProfileSetupModalWithUrl() {
+            closeProfileSetupModal();
+            updateUrl({});
+        }
+
+        function closePersonalCabinetModalWithUrl() {
+            closePersonalCabinetModal();
+            updateUrl({});
+        }
+
+        // Инициализация при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function () {
+            // Инициализация модального окна изображений
+            initImageModal();
+
+            // Обрабатываем параметры URL при загрузке
+            setTimeout(openModalFromUrl, 100);
+
+            // Обновляем все ссылки на странице
+            updateModalLinks();
+        });
+
+        // Функция для обновления всех ссылок на модальные окна
+        function updateModalLinks() {
+            // Обновляем ссылки в header
+            const headerLoginBtn = document.querySelector('.header-auth .login-btn');
+            const headerRegisterBtn = document.querySelector('.header-auth .register-btn');
+
+            if (headerLoginBtn) {
+                headerLoginBtn.onclick = openLoginModalWithUrl;
+            }
+            if (headerRegisterBtn) {
+                headerRegisterBtn.onclick = openRegistrationModalWithUrl;
+            }
+
+            // Обновляем ссылки в мобильном меню
+            const mobileLoginBtn = document.querySelector('.mobile-auth .login-btn');
+            const mobileRegisterBtn = document.querySelector('.mobile-auth .register-btn');
+
+            if (mobileLoginBtn) {
+                mobileLoginBtn.onclick = openLoginModalWithUrl;
+            }
+            if (mobileRegisterBtn) {
+                mobileRegisterBtn.onclick = openRegistrationModalWithUrl;
+            }
+
+            // Обновляем ссылки в других местах (если есть)
+            const profileSetupLinks = document.querySelectorAll('[onclick*="openProfileSetupModal"]');
+            profileSetupLinks.forEach(link => {
+                link.onclick = openProfileSetupModalWithUrl;
+            });
+
+            const cabinetLinks = document.querySelectorAll('[onclick*="openPersonalCabinetModal"]');
+            cabinetLinks.forEach(link => {
+                link.onclick = openPersonalCabinetModalWithUrl;
+            });
+        }
+
+        // Добавляем обработчики для кнопок закрытия
+        document.addEventListener('DOMContentLoaded', function () {
+            // Переопределяем обработчики закрытия модальных окон
+            const closeRegistrationBtn = document.querySelector('#registrationModal .close-modal');
+            const closeLoginBtn = document.querySelector('#loginModal .close-modal');
+            const closeProfileSetupBtn = document.querySelector('#profileSetupModal .close-modal');
+            const closeCabinetBtn = document.querySelector('#personalCabinetModal .close-modal');
+
+            if (closeRegistrationBtn) {
+                closeRegistrationBtn.onclick = closeRegistrationModalWithUrl;
+            }
+            if (closeLoginBtn) {
+                closeLoginBtn.onclick = closeLoginModalWithUrl;
+            }
+            if (closeProfileSetupBtn) {
+                closeProfileSetupBtn.onclick = closeProfileSetupModalWithUrl;
+            }
+            if (closeCabinetBtn) {
+                closeCabinetBtn.onclick = closePersonalCabinetModalWithUrl;
+            }
+        });
+
+        // Обработка кнопки "Назад" в браузере
+        window.addEventListener('popstate', function (event) {
+            // Закрываем все модальные окна при нажатии "Назад"
+            closeAllModals();
+            // Снова проверяем URL на наличие параметров
+            setTimeout(openModalFromUrl, 50);
+        });
+
+        function closeAllModals() {
+            closeRegistrationModal();
+            closeLoginModal();
+            closeProfileSetupModal();
+            closePersonalCabinetModal();
+            updateUrl({});
+        }
+
         // ОСНОВНАЯ ФУНКЦИЯ РЕГИСТРАЦИИ
         function submitRegistration(event) {
             event.preventDefault();
@@ -6011,86 +6170,29 @@
             // Проверяем пользователя через систему модератора
             setTimeout(() => {
                 if (verifyUserPassword(username, password)) {
-                    // Успешный вход - загружаем данные профиля с "сервера"
-                    loadUserProfileFromServer(username, password)
-                        .then(profileData => {
-                            // Сохраняем данные пользователя
-                            const userData = {
-                                username: username,
-                                registrationDate: new Date().toISOString(),
-                                profileComplete: true,
-                                profileName: profileData.profileName,
-                                profileNickname: profileData.profileNickname
-                            };
+                    // Успешный вход
+                    const userData = {
+                        username: username,
+                        registrationDate: new Date().toISOString(),
+                        profileComplete: true
+                    };
 
-                            localStorage.setItem('currentUser', JSON.stringify(userData));
-                            currentUser = userData;
+                    localStorage.setItem('currentUser', JSON.stringify(userData));
+                    currentUser = userData;
+                    updateAuthUI();
 
-                            // Сохраняем полные данные профиля
-                            localStorage.setItem('userProfile_' + username, JSON.stringify(profileData));
+                    showLoginMessage('Вход выполнен успешно!', 'success');
 
-                            updateAuthUI();
-                            showLoginMessage('Вход выполнен успешно!', 'success');
-
-                            // Закрываем модальное окно через 1.5 секунды
-                            setTimeout(() => {
-                                closeLoginModal();
-                                // Показываем личный кабинет если нужно
-                                openPersonalCabinetModal();
-                            }, 1500);
-                        })
-                        .catch(error => {
-                            showLoginMessage('Ошибка загрузки профиля: ' + error, 'error');
-                            loginBtn.disabled = false;
-                            loginBtn.textContent = 'Войти';
-                        });
+                    // Закрываем модальное окно через 1.5 секунды
+                    setTimeout(() => {
+                        closeLoginModal();
+                    }, 1500);
                 } else {
                     showLoginMessage('Неверный логин или пароль', 'error');
                     loginBtn.disabled = false;
                     loginBtn.textContent = 'Войти';
                 }
             }, 1500);
-        }
-
-        // ЭМУЛЯЦИЯ СЕРВЕРА - В РЕАЛЬНОМ ПРОЕКТЕ ЭТО БУДЕТ AJAX ЗАПРОС
-        function loadUserProfileFromServer(username, password) {
-            return new Promise((resolve, reject) => {
-                // Проверяем, есть ли пользователь в базе модератора
-                if (!verifyUserPassword(username, password)) {
-                    reject('Пользователь не найден или не прошел модерацию');
-                    return;
-                }
-
-                // Эмуляция задержки сети
-                setTimeout(() => {
-                    // В реальном проекте здесь будет запрос к серверу
-                    // Сейчас эмулируем данные из localStorage или создаем новые
-
-                    // Пытаемся найти локальные данные
-                    const localProfile = localStorage.getItem('userProfile_' + username);
-
-                    if (localProfile) {
-                        // Используем локальные данные
-                        resolve(JSON.parse(localProfile));
-                    } else {
-                        // Создаем базовый профиль из данных модератора
-                        const serverProfile = {
-                            profileName: username.replace('user_', '').split('_')[0],
-                            profileNickname: '@' + username.replace('user_', '').split('_')[0],
-                            profileStyle: 'Художник',
-                            userPassword: password,
-                            avatar: 'https://i.postimg.cc/K81gkwBL/photo-5226705699080367487-x.jpg',
-                            socialLinks: [],
-                            works: [],
-                            lastUpdated: new Date().toISOString(),
-                            publicationStatus: 'published', // Предполагаем, что прошел модерацию
-                            isFromServer: true // Помечаем, что данные с сервера
-                        };
-
-                        resolve(serverProfile);
-                    }
-                }, 1000);
-            });
         }
 
         // ========== ИНСТРУКЦИИ ДЛЯ МОДЕРАТОРОВ ==========
@@ -6293,7 +6395,7 @@ publishUserProfile("user_abc123")
         }
 
         function navigateCabinetWork(direction) {
-            if (cabinetWorks.length === 0) return;
+            if (cabinetWorks.length === 0 || cabinetWorks.length === 1) return;
 
             currentCabinetWorkIndex += direction;
 
@@ -6305,33 +6407,81 @@ publishUserProfile("user_abc123")
             }
 
             const modalImg = document.getElementById('cabinetFullscreenImg');
-            modalImg.src = cabinetWorks[currentCabinetWorkIndex];
 
-            // Обновляем счетчик
-            updateCabinetFullscreenCounter();
-
-            // Анимация перехода
+            // Плавная смена изображения
             modalImg.style.opacity = '0';
+
             setTimeout(() => {
+                modalImg.src = cabinetWorks[currentCabinetWorkIndex];
                 modalImg.style.opacity = '1';
-            }, 10);
+
+                // Обновляем счетчик
+                updateCabinetFullscreenCounter();
+            }, 200);
         }
 
         function updateCabinetFullscreenCounter() {
+            const counter = document.getElementById('cabinetFullscreenCounter');
             if (cabinetWorks.length > 1) {
-                const counter = document.getElementById('cabinetFullscreenCounter');
                 counter.textContent = `${currentCabinetWorkIndex + 1} / ${cabinetWorks.length}`;
                 counter.style.display = 'block';
+
+                // Показываем стрелки навигации
+                document.querySelectorAll('.cabinet-fullscreen-nav').forEach(btn => {
+                    btn.style.display = 'flex';
+                });
             } else {
-                document.getElementById('cabinetFullscreenCounter').style.display = 'none';
+                counter.style.display = 'none';
+
+                // Скрываем стрелки навигации
+                document.querySelectorAll('.cabinet-fullscreen-nav').forEach(btn => {
+                    btn.style.display = 'none';
+                });
             }
         }
 
-        function setupCabinetFullscreenModalEvents() {
-            // Обработчики для клавиатуры
-            document.addEventListener('keydown', handleCabinetFullscreenKeydown);
+        // ========== ДОБАВИТЬ В CSS ДЛЯ КОРРЕКТНОГО ОТОБРАЖЕНИЯ СТРЕЛОК ==========
 
-            // Обработчики для свайпа
+        // Добавьте эти стили в ваш CSS
+        const navigationFixStyles = `
+@media (min-width: 769px) {
+    .modal-nav-btn,
+    .profile-works-modal-nav,
+    .cabinet-fullscreen-nav {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 768px) {
+    .modal-nav-btn,
+    .profile-works-modal-nav,
+    .cabinet-fullscreen-nav {
+        display: none !important;
+    }
+}
+
+/* Плавные переходы для изображений */
+.image-modal-img,
+.profile-works-modal-img,
+.cabinet-fullscreen-img {
+    transition: opacity 0.3s ease-in-out;
+}
+`;
+
+        // Добавляем стили в документ
+        const styleElement = document.createElement('style');
+        styleElement.textContent = navigationFixStyles;
+        document.head.appendChild(styleElement);
+
+        function setupCabinetFullscreenModalEvents() {
+            // Обработчики для клавиатуры (только для десктопов)
+            if (window.innerWidth > 768) {
+                document.addEventListener('keydown', handleCabinetFullscreenKeydown);
+            }
+
+            // Обработчики для свайпа (работают на всех устройствах)
             const modalContent = document.querySelector('.cabinet-fullscreen-content');
             modalContent.addEventListener('touchstart', handleCabinetFullscreenTouchStart, { passive: false });
             modalContent.addEventListener('touchmove', handleCabinetFullscreenTouchMove, { passive: false });
@@ -7454,6 +7604,8 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             const imageModal = document.getElementById('imageModal');
             const expandedImg = document.getElementById('expandedImg');
 
+            // Сбрасываем прозрачность
+            expandedImg.style.opacity = '1';
             expandedImg.src = imgSrc;
             imageModal.style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -7475,7 +7627,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
         }
 
         function navigateImage(direction) {
-            if (currentImages.length === 0) return;
+            if (currentImages.length === 0 || currentImages.length === 1) return;
 
             currentImageIndex += direction;
 
@@ -7487,33 +7639,47 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             }
 
             const expandedImg = document.getElementById('expandedImg');
-            expandedImg.src = currentImages[currentImageIndex];
 
-            // Обновляем счетчик
-            updateImageCounter();
-
-            // Анимация перехода
+            // Плавная смена изображения
             expandedImg.style.opacity = '0';
+
             setTimeout(() => {
+                expandedImg.src = currentImages[currentImageIndex];
                 expandedImg.style.opacity = '1';
-            }, 10);
+
+                // Обновляем счетчик
+                updateImageCounter();
+            }, 200);
         }
 
+
         function updateImageCounter() {
+            const counter = document.getElementById('imageCounter');
             if (currentImages.length > 1) {
-                const counter = document.getElementById('imageCounter');
                 counter.textContent = `${currentImageIndex + 1} / ${currentImages.length}`;
                 counter.style.display = 'block';
+
+                // Показываем стрелки навигации только если больше 1 изображения
+                document.querySelectorAll('.modal-nav-btn').forEach(btn => {
+                    btn.style.display = 'flex';
+                });
             } else {
-                document.getElementById('imageCounter').style.display = 'none';
+                counter.style.display = 'none';
+
+                // Скрываем стрелки навигации если только 1 изображение
+                document.querySelectorAll('.modal-nav-btn').forEach(btn => {
+                    btn.style.display = 'none';
+                });
             }
         }
 
         function setupImageModalEvents() {
-            // Обработчики для клавиатуры
-            document.addEventListener('keydown', handleImageKeydown);
+            // Обработчики для клавиатуры (только для десктопов)
+            if (window.innerWidth > 768) {
+                document.addEventListener('keydown', handleImageKeydown);
+            }
 
-            // Обработчики для свайпа
+            // Обработчики для свайпа (работают на всех устройствах)
             const modalContent = document.querySelector('.image-modal-content');
             modalContent.addEventListener('touchstart', handleImageTouchStart, { passive: false });
             modalContent.addEventListener('touchmove', handleImageTouchMove, { passive: false });
@@ -8043,50 +8209,42 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
 
         function nextWork(worksInnerId, step = null) {
             const worksInner = document.getElementById(worksInnerId);
+            if (!worksInner) return;
+
             const works = worksInner.querySelectorAll('.work-thumb, .work-thumb-1, .work-thumb-2, .work-thumb-3');
             const state = carouselStates[worksInnerId];
 
+            if (works.length === 0) return;
+
             if (step === null) step = getVisibleWorksCount(worksInnerId);
 
-            // Получаем ширину контейнера и общую ширину всех работ
             const containerWidth = worksInner.parentElement.offsetWidth;
             const totalWorksWidth = Array.from(works).reduce((sum, work) => sum + work.offsetWidth + 35, 0);
+            const maxPosition = Math.min(0, containerWidth - totalWorksWidth - 35);
 
-            // Рассчитываем максимальное смещение (чтобы последний элемент был виден)
-            const maxPosition = containerWidth - totalWorksWidth - 35; // Добавляем отступ для последнего элемента
-
-            // Рассчитываем новое положение
             const newPosition = state.currentTranslate - (step * (works[0].offsetWidth + 35));
 
-            // Для мобильных устройств делаем дополнительную проверку
-            if (window.innerWidth <= 768) {
-                // Проверяем, не выходим ли мы за пределы
-                if (Math.abs(newPosition) > (totalWorksWidth - containerWidth)) {
-                    // Если пытаемся пролистать дальше последнего элемента, останавливаемся
-                    state.currentTranslate = -(totalWorksWidth - containerWidth);
-                } else {
-                    state.currentTranslate = newPosition;
-                }
-            } else {
-                // Для десктопной версии оставляем прежнюю логику
-                state.currentTranslate = Math.max(newPosition, maxPosition);
-            }
+            // Ограничиваем смещение
+            state.currentTranslate = Math.max(newPosition, maxPosition);
 
             worksInner.style.transition = 'transform 0.5s ease';
             setPosition(worksInnerId);
         }
 
         function prevWork(worksInnerId, step = null) {
-            const worksInner = document.getElementById('worksInnerId');
+            const worksInner = document.getElementById(worksInnerId);
+            if (!worksInner) return;
+
             const works = worksInner.querySelectorAll('.work-thumb, .work-thumb-1, .work-thumb-2, .work-thumb-3');
             const state = carouselStates[worksInnerId];
 
+            if (works.length === 0) return;
+
             if (step === null) step = getVisibleWorksCount(worksInnerId);
 
-            // Рассчитываем новое положение
             const newPosition = state.currentTranslate + (step * (works[0].offsetWidth + 35));
 
-            // Ограничиваем смещение, чтобы не выйти за пределы (не больше 0)
+            // Ограничиваем смещение (не больше 0)
             state.currentTranslate = Math.min(newPosition, 0);
 
             worksInner.style.transition = 'transform 0.5s ease';
@@ -8356,7 +8514,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
         }
 
         function navigateProfileWork(direction) {
-            if (profileWorks.length === 0) return;
+            if (profileWorks.length === 0 || profileWorks.length === 1) return;
 
             currentProfileWorkIndex += direction;
 
@@ -8368,33 +8526,46 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             }
 
             const modalImg = document.getElementById('profileWorksModalImg');
-            modalImg.src = profileWorks[currentProfileWorkIndex];
 
-            // Обновляем счетчик
-            updateProfileWorksCounter();
-
-            // Анимация перехода
+            // Плавная смена изображения
             modalImg.style.opacity = '0';
+
             setTimeout(() => {
+                modalImg.src = profileWorks[currentProfileWorkIndex];
                 modalImg.style.opacity = '1';
-            }, 10);
+
+                // Обновляем счетчик
+                updateProfileWorksCounter();
+            }, 200);
         }
 
         function updateProfileWorksCounter() {
+            const counter = document.getElementById('profileWorksModalCounter');
             if (profileWorks.length > 1) {
-                const counter = document.getElementById('profileWorksModalCounter');
                 counter.textContent = `${currentProfileWorkIndex + 1} / ${profileWorks.length}`;
                 counter.style.display = 'block';
+
+                // Показываем стрелки навигации
+                document.querySelectorAll('.profile-works-modal-nav').forEach(btn => {
+                    btn.style.display = 'flex';
+                });
             } else {
-                document.getElementById('profileWorksModalCounter').style.display = 'none';
+                counter.style.display = 'none';
+
+                // Скрываем стрелки навигации
+                document.querySelectorAll('.profile-works-modal-nav').forEach(btn => {
+                    btn.style.display = 'none';
+                });
             }
         }
 
         function setupProfileWorksModalEvents() {
-            // Обработчики для клавиатуры
-            document.addEventListener('keydown', handleProfileWorksKeydown);
+            // Обработчики для клавиатуры (только для десктопов)
+            if (window.innerWidth > 768) {
+                document.addEventListener('keydown', handleProfileWorksKeydown);
+            }
 
-            // Обработчики для свайпа
+            // Обработчики для свайпа (работают на всех устройствах)
             const modalContent = document.querySelector('.profile-works-modal-content');
             modalContent.addEventListener('touchstart', handleProfileWorksTouchStart, { passive: false });
             modalContent.addEventListener('touchmove', handleProfileWorksTouchMove, { passive: false });
@@ -8607,10 +8778,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="#4CAF50">
                         <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                     </svg>
-                    Профиль опубликован ✅
-                </div>
-                <div style="font-size: 0.8em; color: #aaa; margin-top: 5px;">
-                    Ваш профиль виден всем пользователям
+                    Профиль опубликован
                 </div>
             `;
                     statusElement.classList.add('published');
@@ -8621,38 +8789,12 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="#ff9800">
                         <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-12S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                     </svg>
-                    Ожидает проверки модератора ⏳
-                </div>
-                <div style="font-size: 0.8em; color: #aaa; margin-top: 5px;">
-                    Обычно это занимает 1-3 дня
+                    Проходит проверку
                 </div>
             `;
                     statusElement.classList.remove('published');
                 }
             }
-        }
-
-        // ФУНКЦИЯ ПРОВЕРКИ СТАТУСА ПУБЛИКАЦИИ ПРОФИЛЯ
-        function checkProfilePublicationStatus(username) {
-            // 1. Проверяем в базе модератора
-            if (moderatorPasswords[username]) {
-                // 2. Проверяем, есть ли профиль на странице
-                const userProfile = localStorage.getItem('userProfile_' + username);
-                if (userProfile) {
-                    const profileData = JSON.parse(userProfile);
-                    const profileName = profileData.profileName;
-
-                    // Ищем профиль на странице по имени
-                    const publishedProfiles = document.querySelectorAll('.profile-section h1');
-                    for (let profile of publishedProfiles) {
-                        if (profile.textContent.trim() === profileName) {
-                            return true;
-                        }
-                    }
-                }
-            }
-
-            return false;
         }
 
         // Обновленная функция загрузки данных личного кабинета
@@ -8661,7 +8803,6 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
 
             // Загружаем данные профиля
             const userProfile = localStorage.getItem('userProfile_' + currentUser.username);
-
             if (userProfile) {
                 const profileData = JSON.parse(userProfile);
 
@@ -8672,7 +8813,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
                 document.getElementById('cabinetTelegramText').textContent = profileData.profileNickname || '@username';
                 document.getElementById('cabinetTelegramLink').href = 'https://t.me/' + (profileData.profileNickname || 'username').replace('@', '');
 
-                // ОБНОВЛЕННАЯ ПРОВЕРКА СТАТУСА ПУБЛИКАЦИИ
+                // Обновляем статус публикации
                 updatePublicationStatus();
 
                 // Загружаем социальные сети
@@ -8683,62 +8824,8 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
 
                 // Загружаем работы
                 loadCabinetWorks(profileData.works);
-
-                // Загружаем опубликованные работы с сайта
-                loadPublishedWorks();
             }
         }
-
-        // ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ ОПУБЛИКОВАННЫХ РАБОТ С САЙТА
-        function loadPublishedWorks() {
-            if (!currentUser) return;
-
-            const userProfile = localStorage.getItem('userProfile_' + currentUser.username);
-            if (!userProfile) return;
-
-            const profileData = JSON.parse(userProfile);
-            const profileName = profileData.profileName;
-
-            // Ищем профиль пользователя на странице
-            const publishedProfiles = document.querySelectorAll('.profile-section');
-            let publishedWorks = [];
-
-            publishedProfiles.forEach(profile => {
-                const profileTitle = profile.querySelector('h1')?.textContent?.trim();
-
-                if (profileTitle === profileName) {
-                    // Нашли опубликованный профиль - получаем работы
-                    const profileId = profile.closest('section').id;
-                    const worksCarousel = document.getElementById(`artist${profileId}Works`);
-
-                    if (worksCarousel) {
-                        const workImages = worksCarousel.querySelectorAll('img');
-                        publishedWorks = Array.from(workImages).map(img => img.src);
-                    }
-                }
-            });
-
-            // Обновляем счетчик опубликованных работ
-            const worksCountElement = document.createElement('div');
-            worksCountElement.className = 'published-works-count';
-            worksCountElement.innerHTML = `
-        <div style="background: rgba(76, 175, 80, 0.1); padding: 10px; border-radius: 8px; margin: 10px 0; border-left: 3px solid #4CAF50;">
-            <div style="display: flex; align-items: center; gap: 8px; color: #4CAF50; font-weight: bold;">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="#4CAF50">
-                    <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                </svg>
-                Опубликовано работ: ${publishedWorks.length}
-            </div>
-        </div>
-    `;
-
-            // Добавляем в секцию работ
-            const worksSection = document.querySelector('.cabinet-section:has(.cabinet-works-btn)');
-            if (worksSection && !worksSection.querySelector('.published-works-count')) {
-                worksSection.insertBefore(worksCountElement, worksSection.querySelector('.cabinet-works-btn'));
-            }
-        }
-
 
         // Обновленный HTML для личного кабинета (добавляем элемент для статуса)
         function updatePersonalCabinetHTML() {
@@ -9290,6 +9377,34 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             }
         });
 
+        // Проверка авторизации при загрузке страницы
+        document.addEventListener('DOMContentLoaded', function () {
+            checkAuthStatus();
+
+            // Инициализация каруселей
+            initCarousel('artist1Works');
+            initCarousel('artistгусь2Works');
+            initCarousel('artist3Works');
+
+            // Инициализация фильтров
+            initFilters();
+
+            // Добавляем класс к первому элементу "Все стили"
+            const firstFilter = document.querySelector('.filters-dropdown a:first-child');
+            if (firstFilter) firstFilter.classList.add('active-filter');
+
+            // Адаптация каруселей при изменении размера окна
+            window.addEventListener('resize', () => {
+                Object.keys(carouselStates).forEach(worksInnerId => {
+                    carouselStates[worksInnerId].currentTranslate = 0;
+                    setPosition(worksInnerId);
+                });
+            });
+
+            // Инициализация модального окна изображений
+            initImageModal();
+        });
+
         // ========== СИСТЕМА ПАРОЛЕЙ ДЛЯ МОДЕРАТОРОВ ==========
 
         // База данных паролей (в реальном проекте это должно быть на сервере)
@@ -9297,25 +9412,22 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             // Формат: userId: password
             "user_abc123": "password123",
             "user_def456": "artemisia2024",
-            "user_5sjr50": "123456",
-            // Добавляйте сюда пользователей после модерации
+            "user_ghi789": "artist888",
+            "user_5sjr50": "123456"
+            // Модераторы будут добавлять сюда пароли вручную
         };
 
         // Функция для добавления пароля модератором
         function addUserPassword(userId, password) {
             if (userId && password) {
                 moderatorPasswords[userId] = password;
-                console.log(`✅ Пароль для пользователя ${userId} добавлен модератором`);
-
-                // Помечаем пользователя как опубликованного
-                localStorage.setItem('profilePublished_' + userId, 'true');
-
+                console.log(`Пароль для пользователя ${userId} добавлен модератором`);
                 return true;
             }
             return false;
         }
 
-        // Функция для проверки пароля
+        // Функция для проверки пароля при входе
         function verifyUserPassword(username, password) {
             return moderatorPasswords[username] === password;
         }
@@ -9337,4 +9449,4 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
     </script>
 </body>
 
-</html>
+</html> 
