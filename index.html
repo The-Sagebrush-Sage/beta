@@ -4772,14 +4772,14 @@
         </div>
 
         <ul class="menu">
-            <li><a href="proba3.html">
+            <li><a href="https://the-sagebrush-sage.github.io/beta/">
                     <img src="https://i.postimg.cc/6p8Gfk0N/home.png" alt="Главная">
                     Главная
                 </a>
             </li>
 
             <li>
-                <a href="Prem_Artist.html">
+                <a href="proba3.html">
                     <img src="https://i.postimg.cc/Z5Y5rqkg/prem-art.png" alt="Художники">
                     Prem Artist
                 </a>
@@ -5718,7 +5718,8 @@
 
         // Проверка статуса авторизации
         function checkAuthStatus() {
-            const userData = localStorage.getItem('currentUser');
+            // Используем sessionStorage вместо localStorage для временного хранения
+            const userData = sessionStorage.getItem('currentUser_page');
             if (userData) {
                 currentUser = JSON.parse(userData);
                 updateAuthUI();
@@ -5736,7 +5737,7 @@
 
             if (currentUser) {
                 // Загружаем данные профиля для отображения аватарки
-                const userProfile = localStorage.getItem('userProfile_' + currentUser.username);
+                const userProfile = sessionStorage.getItem('userProfile_page_' + currentUser.username);
                 let profileData = {};
 
                 if (userProfile) {
@@ -5781,7 +5782,7 @@
             </div>
         `;
 
-                // Обновляем мобильный профиль (будет скрыт на ПК через CSS)
+                // Обновляем мобильный профиль
                 if (window.innerWidth <= 768) {
                     mobileUserProfile.style.display = 'flex';
                     mobileUserProfile.querySelector('#mobileUserAvatar').src = avatarSrc;
@@ -5909,9 +5910,9 @@
 
         // Выход из системы
         function logout() {
-            // Не удаляем данные пользователя, только выходим из системы
+            // Удаляем данные пользователя ТОЛЬКО из sessionStorage этой страницы
             currentUser = null;
-            localStorage.removeItem('currentUser');
+            sessionStorage.removeItem('currentUser_page');
             updateAuthUI();
             closePersonalCabinetModal();
             showProfileSuccess('Вы успешно вышли из системы');
@@ -5919,6 +5920,7 @@
             // Показываем кнопку входа вместо регистрации
             updateRegistrationButton();
         }
+
 
         // Функция для обновления отображения кнопки регистрации
         function updateRegistrationButton() {
@@ -6387,12 +6389,18 @@
 
         // Функция для проверки статуса регистрации
         function checkRegistrationStatus() {
-            // Проверяем, есть ли зарегистрированные пользователи в localStorage
-            const registeredUsers = Object.keys(localStorage).filter(key =>
-                key.startsWith('user_') && key !== 'currentUser'
-            );
+            // Проверяем, есть ли зарегистрированные пользователи в sessionStorage
+            let hasRegisteredUsers = false;
 
-            return registeredUsers.length > 0 || currentUser !== null;
+            for (let i = 0; i < sessionStorage.length; i++) {
+                const key = sessionStorage.key(i);
+                if (key && key.startsWith('user_') && key.includes('_page')) {
+                    hasRegisteredUsers = true;
+                    break;
+                }
+            }
+
+            return hasRegisteredUsers || currentUser !== null;
         }
 
         // Функция для получения всех зарегистрированных пользователей
@@ -6434,23 +6442,35 @@
             // Проверяем пользователя через систему модератора
             setTimeout(() => {
                 if (verifyUserPassword(username, password)) {
-                    // Успешный вход
-                    const userData = {
-                        username: username,
-                        registrationDate: new Date().toISOString(),
-                        profileComplete: true
-                    };
+                    // Загружаем профиль пользователя из sessionStorage
+                    const userProfile = sessionStorage.getItem('userProfile_page_' + username);
 
-                    localStorage.setItem('currentUser', JSON.stringify(userData));
-                    currentUser = userData;
-                    updateAuthUI();
+                    if (userProfile) {
+                        const profileData = JSON.parse(userProfile);
 
-                    showLoginMessage('Вход выполнен успешно!', 'success');
+                        // Успешный вход - сохраняем в sessionStorage
+                        const userData = {
+                            username: username,
+                            registrationDate: new Date().toISOString(),
+                            profileComplete: true,
+                            profileName: profileData.profileName
+                        };
 
-                    // Закрываем модальное окно через 1.5 секунды
-                    setTimeout(() => {
-                        closeLoginModal();
-                    }, 1500);
+                        sessionStorage.setItem('currentUser_page', JSON.stringify(userData));
+                        currentUser = userData;
+                        updateAuthUI();
+
+                        showLoginMessage('Вход выполнен успешно!', 'success');
+
+                        // Закрываем модальное окно через 1.5 секунды
+                        setTimeout(() => {
+                            closeLoginModal();
+                        }, 1500);
+                    } else {
+                        showLoginMessage('Профиль пользователя не найден', 'error');
+                        loginBtn.disabled = false;
+                        loginBtn.textContent = 'Войти';
+                    }
                 } else {
                     showLoginMessage('Неверный логин или пароль', 'error');
                     loginBtn.disabled = false;
@@ -6458,6 +6478,7 @@
                 }
             }, 1500);
         }
+
 
         // ========== ИНСТРУКЦИИ ДЛЯ МОДЕРАТОРОВ ==========
 
@@ -7543,7 +7564,7 @@ ${index + 1}. ${user.name}
 ║ User ID: ${username}
 ║ Пароль: ${userPassword}
 ║ Имя: ${profileData.profileName}
-║ Telegram: @${profileData.profileNickname}
+║ Telegram: ${profileData.profileNickname}
 ║ Специальность: ${profileData.profileStyle}
 ║ Дата создания: ${new Date().toLocaleDateString()}
 ║ Кол-во работ: ${profileData.works ? profileData.works.length : 0}
@@ -7569,8 +7590,8 @@ publishUserProfile("${username}");
         <div class="profile-info">
             <h1>${profileData.profileName}</h1>
             <a href="https://t.me/${profileData.profileNickname.replace('@', '')}" class="profile-link">
-                <img src="https://i.postimg.cc/cJXCqTTc/icons8-48.png" alt="Telegram" class="profile-link-icon"> 
-                @${profileData.profileNickname}
+                <img src="https://i.postimg.cc/cJXCqTTc/icons8-48.png" alt="Telegram" class="profile-link-icon">
+                ${profileData.profileNickname}
             </a>
             <p>Специальность: ${profileData.profileStyle}</p>
             <div class="social-links">
@@ -7630,7 +7651,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             if (instructionsBox) {
                 if (isExistingUser) {
                     instructionsBox.innerHTML = `
-                <h4 class="instructions-title">Обновление профиля</h4>
+                <h4 class="instructions-title">🔄 Обновление профиля</h4>
                 <div style="background: rgba(33, 150, 243, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 3px solid #2196F3;">
                     <div style="text-align: center; color: #2196F3; font-weight: bold; margin-bottom: 10px;">
                         ✅ Профиль успешно обновлен!
@@ -7737,26 +7758,20 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             }
         }
 
-        // ФУНКЦИЯ ДЛЯ ЗАКРЫТИЯ МОДАЛЬНОГО ОКНА
+
         function closeCodeModal() {
             const modal = document.getElementById('codeModal');
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
-
-            // Очищаем код при закрытии
-            currentProfileCode = '';
         }
 
         function copyProfileCode() {
+            const codeText = document.getElementById('profileCodeText');
             const copyBtn = document.getElementById('copyCodeBtn');
-            const successMessage = document.getElementById('successMessage');
 
             // Создаем временный textarea для копирования
             const textArea = document.createElement('textarea');
-            textArea.value = currentProfileCode;
-            textArea.style.position = 'fixed';
-            textArea.style.left = '-999999px';
-            textArea.style.top = '-999999px';
+            textArea.value = codeText.textContent;
             document.body.appendChild(textArea);
             textArea.select();
             textArea.setSelectionRange(0, 99999); // Для мобильных устройств
@@ -7764,71 +7779,28 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             try {
                 const successful = document.execCommand('copy');
                 if (successful) {
-                    // Успешное копирование
                     copyBtn.innerHTML = `
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                    Код скопирован!
-                `;
-                    copyBtn.classList.add('copied');
-
-                    // Показываем сообщение об успехе
-                    successMessage.classList.add('show');
-
-                    // Автоматически скрываем сообщение через 3 секунды
-                    setTimeout(() => {
-                        successMessage.classList.remove('show');
-                    }, 3000);
-
-                    // Возвращаем исходный текст кнопки через 5 секунд
-                    setTimeout(() => {
-                        copyBtn.innerHTML = `
-                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-                        </svg>
-                        Скопировать код
-                    `;
-                        copyBtn.classList.remove('copied');
-                    }, 5000);
-
-                    console.log('✅ Код профиля успешно скопирован в буфер обмена');
-                }
-            } catch (err) {
-                console.error('❌ Ошибка при копировании: ', err);
-
-                // Альтернативный метод для мобильных устройств
-                if (navigator.clipboard && navigator.clipboard.writeText) {
-                    navigator.clipboard.writeText(currentProfileCode).then(() => {
-                        copyBtn.innerHTML = `
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                         </svg>
                         Код скопирован!
                     `;
-                        copyBtn.classList.add('copied');
-                        successMessage.classList.add('show');
+                    copyBtn.classList.add('copied');
 
-                        setTimeout(() => {
-                            successMessage.classList.remove('show');
-                        }, 3000);
-
-                        setTimeout(() => {
-                            copyBtn.innerHTML = `
+                    // Возвращаем исходный текст через 2 секунды
+                    setTimeout(() => {
+                        copyBtn.innerHTML = `
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
                             </svg>
                             Скопировать код
                         `;
-                            copyBtn.classList.remove('copied');
-                        }, 5000);
-                    }).catch(err => {
-                        console.error('❌ Ошибка clipboard API: ', err);
-                        alert('Не удалось скопировать код. Пожалуйста, скопируйте его вручную из консоли разработчика (F12).');
-                    });
-                } else {
-                    alert('Не удалось скопировать код автоматически. Пожалуйста, скопируйте его вручную из консоли разработчика (F12).');
+                        copyBtn.classList.remove('copied');
+                    }, 2000);
                 }
+            } catch (err) {
+                console.error('Ошибка при копировании: ', err);
+                alert('Не удалось скопировать код. Пожалуйста, скопируйте его вручную.');
             }
 
             document.body.removeChild(textArea);
@@ -8610,13 +8582,6 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             }
         }
 
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Escape' && document.getElementById('codeModal').style.display === 'block') {
-                closeCodeModal();
-            }
-        });
-
-
         // Close modals with ESC key
         document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
@@ -9049,7 +9014,6 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             event.stopPropagation();
         });
 
-
         document.querySelector('.cabinet-works-content').addEventListener('click', function (event) {
             event.stopPropagation();
         });
@@ -9144,8 +9108,8 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
         function loadPersonalCabinetData() {
             if (!currentUser) return;
 
-            // Загружаем данные профиля
-            const userProfile = localStorage.getItem('userProfile_' + currentUser.username);
+            // Загружаем данные профиля из sessionStorage
+            const userProfile = sessionStorage.getItem('userProfile_page_' + currentUser.username);
             if (userProfile) {
                 const profileData = JSON.parse(userProfile);
 
@@ -9170,6 +9134,48 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
 
                 // Обновляем кнопки действий для мобильных устройств
                 updateCabinetActionsForMobile();
+            }
+        }
+
+        // ========== ФУНКЦИЯ ДЛЯ ЗАГРУЗКИ СУЩЕСТВУЮЩЕГО ПРОФИЛЯ ==========
+
+        function loadExistingProfile() {
+            if (!currentUser) return;
+
+            const userProfile = sessionStorage.getItem('userProfile_page_' + currentUser.username);
+            if (userProfile) {
+                const profileData = JSON.parse(userProfile);
+
+                // Заполняем форму данными профиля
+                document.getElementById('profileName').value = profileData.profileName || '';
+                document.getElementById('profileNickname').value = profileData.profileNickname || '';
+                document.getElementById('profileStyle').value = profileData.profileStyle || '';
+
+                if (profileData.profileStyle === 'Другое') {
+                    document.getElementById('profileCustomStyle').value = profileData.profileCustomStyle || '';
+                    document.getElementById('profileCustomStyle').disabled = false;
+                }
+
+                document.getElementById('profileDescription').value = profileData.profileDescription || '';
+                document.getElementById('profilePassword').value = profileData.userPassword || '';
+
+                // Загружаем аватар
+                if (profileData.avatar) {
+                    const preview = document.getElementById('avatarPreview');
+                    preview.innerHTML = `<img src="${profileData.avatar}" alt="Аватар">`;
+                }
+
+                // Загружаем социальные сети
+                if (profileData.socialLinks && profileData.socialLinks.length > 0) {
+                    initializeSocialLinksWithData(profileData.socialLinks);
+                }
+
+                // Загружаем работы
+                if (profileData.works && profileData.works.length > 0) {
+                    initializeWorksWithData(profileData.works);
+                }
+
+                console.log(`📁 Загружен существующий профиль: ${currentUser.username}`);
             }
         }
 
@@ -9384,13 +9390,9 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             const existingUserId = findExistingUserId(profileNickname);
 
             if (existingUserId) {
-                // Используем существующий ID
                 username = existingUserId;
-                console.log(`🔄 Найден существующий профиль: ${username}`);
             } else {
-                // Создаем новый ID
                 username = generateUserId(profileNickname);
-                console.log(`🆕 Создан новый профиль: ${username}`);
             }
 
             // Собираем данные профиля
@@ -9404,7 +9406,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
                     ? document.getElementById('profileCustomStyle').value
                     : '',
                 profileDescription: document.getElementById('profileDescription').value,
-                userPassword: userPassword, // ВАЖНОЕ ИЗМЕНЕНИЕ: Сохраняем пароль
+                userPassword: userPassword,
                 avatar: avatarSrc,
                 socialLinks: socialLinks,
                 works: collectWorks(),
@@ -9413,15 +9415,10 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
                 userId: username
             };
 
-            // Сохраняем профиль в localStorage
-            localStorage.setItem('userProfile_' + username, JSON.stringify(profileData));
+            // Сохраняем профиль в sessionStorage (только для этой страницы)
+            sessionStorage.setItem('userProfile_page_' + username, JSON.stringify(profileData));
 
-            // Если это новый профиль, устанавливаем статус "не опубликован"
-            if (!existingUserId) {
-                localStorage.setItem('profilePublished_' + username, 'false');
-            }
-
-            // Создаем/обновляем запись пользователя
+            // Создаем/обновляем запись пользователя в sessionStorage
             const userData = {
                 username: username,
                 registrationDate: new Date().toISOString(),
@@ -9432,8 +9429,8 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
                 isNewProfile: !existingUserId
             };
 
-            localStorage.setItem('currentUser', JSON.stringify(userData));
-            localStorage.setItem('user_' + username, JSON.stringify(userData));
+            sessionStorage.setItem('currentUser_page', JSON.stringify(userData));
+            sessionStorage.setItem('user_page_' + username, JSON.stringify(userData));
 
             // Обновляем текущего пользователя
             currentUser = userData;
@@ -9472,91 +9469,56 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
 
         // ========== ОБНОВЛЕННОЕ МОДАЛЬНОЕ ОКНО С КОДОМ ==========
 
-        // Переменная для хранения кода профиля
-        let currentProfileCode = '';
-
-        // ОБНОВЛЕННАЯ ФУНКЦИЯ ДЛЯ ОТКРЫТИЯ МОДАЛЬНОГО ОКНА С КОДОМ
-        function openCodeModal(profileCode, username, userPassword, isExistingUser = false) {
-            currentProfileCode = profileCode; // Сохраняем код в переменной
-
+        function openCodeModal(profileCode, username, userPassword) {
             const modal = document.getElementById('codeModal');
+            const codeText = document.getElementById('profileCodeText');
+
+            codeText.textContent = profileCode;
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
 
-            // Сбрасываем состояние кнопки
-            const copyBtn = document.getElementById('copyCodeBtn');
-            copyBtn.classList.remove('copied');
-            copyBtn.innerHTML = `
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
-            </svg>
-            Скопировать код
-        `;
-
-            // Скрываем сообщение об успехе
-            document.getElementById('successMessage').classList.remove('show');
-
-            // Обновляем инструкции в зависимости от того, новый это пользователь или существующий
-            const instructionsBox = document.querySelector('.instructions-box');
+            // Обновляем инструкции с информацией о пароле
+            const instructionsBox = modal.querySelector('.instructions-box');
             if (instructionsBox) {
-                if (isExistingUser) {
-                    instructionsBox.innerHTML = `
-                    <h4 class="instructions-title">Обновление профиля</h4>
-                    <div style="background: rgba(33, 150, 243, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 3px solid #2196F3;">
-                        <div style="text-align: center; color: #2196F3; font-weight: bold; margin-bottom: 10px;">
-                             Профиль успешно обновлен!
-                        </div>
-                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9em;">
-                            <div><strong>User ID:</strong> ${username}</div>
-                            <div><strong>Статус:</strong> Проходит проверку</div>
-                        </div>
-                    </div>
-                    
-                    <h4 class="instructions-title">Дальнейшие действия:</h4>
-                    <ol class="instructions-list">
-                        <li>Нажмите кнопку <strong>"Скопировать код"</strong></li>
-                        <li>Отправьте код модераторам для обновления информации</li>
-                        <li>Войти в аккаунт вы можете на том устройстве, на котором зарегистрировались, введя ID и свой пароль после проверки модератора </li>
-                    </ol>
-                    
-                    <div style="background: rgba(76, 175, 80, 0.1); padding: 12px; border-radius: 8px; margin-top: 15px; border-left: 3px solid #4CAF50;">
-                        <p style="color: #e0e0e0; font-size: 0.9em; margin: 0; text-align: center;">
-                            Ваш ID остался прежним. Вы можете продолжать использовать те же данные для входа.
-                        </p>
-                    </div>
-                `;
-                } else {
-                    instructionsBox.innerHTML = `
-                    <h4 class="instructions-title">🚀 Что делать дальше:</h4>
-                    <ol class="instructions-list">
-                        <li>Нажмите кнопку <strong>"Скопировать код"</strong> выше</li>
-                        <li>Перейдите в нашего Telegram-бота:
-                            <a href="https://t.me/Artemisia_registration_bot" class="instructions-link" target="_blank">
-                                @Artemisia_registration_bot
-                            </a>
-                        </li>
-                        <li>Отправьте скопированный код боту</li>
-                        <li>Ожидайте проверки вашей анкеты модераторами</li>
-                        <li>После проверки ваш профиль появится на сайте</li>
-                    </ol>
-                    
-                    <div style="background: rgba(255, 152, 0, 0.1); padding: 12px; border-radius: 8px; margin-top: 15px; border-left: 3px solid #ff9800;">
-                        <div style="display: flex; align-items: center; gap: 8px; color: #ff9800; font-weight: bold; margin-bottom: 5px;">
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="#ff9800">
-                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-12S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                            </svg>
-                            Код содержит всю необходимую информацию
-                        </div>
-                        <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">
-                            Модераторы увидят ваш никнейм, специальность, работы и контактные данные
-                        </p>
-                    </div>
-                    
-                    <p style="color: #ffcc00; margin-top: 15px; font-size: 0.9em; text-align: center;">
-                        ⏳ Обычно проверка занимает от 1 до 3 дней
-                    </p>
-                `;
-                }
+                instructionsBox.innerHTML = `
+            <h4 class="instructions-title">📋 Информация для модератора</h4>
+            <div style="background: rgba(255, 152, 0, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 3px solid #ff9800;">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9em;">
+                    <div><strong>User ID:</strong> ${username}</div>
+                    <div><strong>Пароль:</strong> ${userPassword}</div>
+                    <div><strong>Логин для входа:</strong> ${username}</div>
+                    <div><strong>Пароль для входа:</strong> ${userPassword}</div>
+                </div>
+            </div>
+            
+            <h4 class="instructions-title">🚀 Что делать дальше:</h4>
+            <ol class="instructions-list">
+                <li>Нажмите кнопку "Скопировать код" выше</li>
+                <li>Отправьте код модераторам в Telegram</li>
+                <li>Модератор добавит пароль в систему командой: 
+                    <code style="background: #333; padding: 2px 6px; border-radius: 4px; font-family: monospace;">
+                        addUserPassword("${username}", "${userPassword}")
+                    </code>
+                </li>
+                <li>После добавления пароля профиль будет опубликован</li>
+                <li>Вы сможете войти используя:<br>
+                    <strong>Логин:</strong> ${username}<br>
+                    <strong>Пароль:</strong> ${userPassword}
+                </li>
+            </ol>
+            
+            <div style="background: rgba(76, 175, 80, 0.1); padding: 12px; border-radius: 8px; margin-top: 15px; border-left: 3px solid #4CAF50;">
+                <div style="display: flex; align-items: center; gap: 8px; color: #4CAF50; font-weight: bold; margin-bottom: 5px;">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#4CAF50">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                    Готово к публикации!
+                </div>
+                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">
+                    После добавления пароля модератором ваш профиль будет опубликован и вы сможете войти в систему.
+                </p>
+            </div>
+        `;
             }
         }
 
@@ -9591,29 +9553,23 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
 
         // Проверка авторизации при загрузке страницы
         document.addEventListener('DOMContentLoaded', function () {
-            checkAuthStatus();
-
-            // Показываем информацию о регистрации в консоли для отладки
-            const registeredUsers = getRegisteredUsers();
-            if (registeredUsers.length > 0) {
-                console.log('📋 Зарегистрированные пользователи на этом устройстве:', registeredUsers);
+            // Для страницы дизайнеров
+            if (window.location.pathname.includes('Design.html') ||
+                window.location.pathname.endsWith('/')) {
+                checkAuthStatus();
             }
 
+            // Для главной страницы
+            if (window.location.pathname.includes('index.html') ||
+                window.location.pathname.endsWith('/')) {
+                checkMainPageAuth();
+            }
 
-
-            // Добавляем класс к первому элементу "Все стили"
-            const firstFilter = document.querySelector('.filters-dropdown a:first-child');
-            if (firstFilter) firstFilter.classList.add('active-filter');
-
-            // Адаптация каруселей при изменении размера окна
-            window.addEventListener('resize', () => {
-                Object.keys(carouselStates).forEach(worksInnerId => {
-                    carouselStates[worksInnerId].currentTranslate = 0;
-                    setPosition(worksInnerId);
-                });
-            });
-
-            // Инициализация модального окна изображений
+            // Остальная инициализация...
+            initCarousel('artist1Works');
+            initCarousel('artistгусь2Works');
+            initCarousel('artist3Works');
+            initFilters();
             initImageModal();
         });
 
@@ -10056,6 +10012,77 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             });
 
             return users;
+        }
+
+        // Функция для проверки авторизации на главной странице
+        function checkMainPageAuth() {
+            // Проверяем sessionStorage текущей вкладки
+            const userData = sessionStorage.getItem('currentUser_page');
+            if (userData) {
+                const user = JSON.parse(userData);
+                updateMainPageAuthUI(user);
+            } else {
+                // Если нет в sessionStorage, проверяем localStorage (для обратной совместимости)
+                const localStorageUser = localStorage.getItem('currentUser');
+                if (localStorageUser) {
+                    const user = JSON.parse(localStorageUser);
+                    updateMainPageAuthUI(user);
+
+                    // Переносим в sessionStorage для текущей сессии
+                    sessionStorage.setItem('currentUser_page', localStorageUser);
+                } else {
+                    showDefaultAuthUI();
+                }
+            }
+        }
+
+        // Обновление интерфейса главной страницы для авторизованного пользователя
+        function updateMainPageAuthUI(user) {
+            const authSection = document.getElementById('authSection');
+            if (!authSection) return;
+
+            // Загружаем профиль пользователя
+            const userProfile = sessionStorage.getItem('userProfile_page_' + user.username) ||
+                localStorage.getItem('userProfile_' + user.username);
+
+            let profileData = {};
+            if (userProfile) {
+                profileData = JSON.parse(userProfile);
+            }
+
+            const avatarSrc = profileData.avatar || 'https://i.postimg.cc/K81gkwBL/photo-5226705699080367487-x.jpg';
+            const displayName = profileData.profileName || user.username;
+
+            authSection.innerHTML = `
+        <div class="user-profile-container">
+            <button class="user-profile-btn" onclick="window.location.href='Design.html'">
+                <img src="${avatarSrc}" alt="Аватар" class="user-avatar">
+                <span class="user-name">${displayName}</span>
+            </button>
+            <button class="auth-btn login-btn" onclick="logoutFromMainPage()">
+                Выйти
+            </button>
+        </div>
+    `;
+        }
+
+        // Показ стандартного интерфейса авторизации на главной странице
+        function showDefaultAuthUI() {
+            const authSection = document.getElementById('authSection');
+            if (!authSection) return;
+
+            authSection.innerHTML = `
+        <button class="auth-btn login-btn" onclick="openLoginModal()">Войти</button>
+        <button class="auth-btn register-btn" onclick="openRegistrationModal()">Регистрация</button>
+    `;
+        }
+
+        // Выход с главной страницы
+        function logoutFromMainPage() {
+            sessionStorage.removeItem('currentUser_page');
+            localStorage.removeItem('currentUser');
+            checkMainPageAuth();
+            showProfileSuccess('Вы успешно вышли из системы');
         }
     </script>
 </body>
