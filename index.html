@@ -4267,11 +4267,12 @@
             margin: 5% auto;
             padding: 30px 25px;
             border-radius: 16px;
-            max-width: 800px;
+            max-width: 600px;
             width: 95%;
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.7);
             animation: modalSlideIn 0.4s ease-out;
             border: 1px solid rgba(255, 204, 0, 0.3);
+            text-align: center;
         }
 
         .code-modal-header {
@@ -4298,7 +4299,7 @@
         .code-container {
             background: rgba(51, 51, 51, 0.7);
             border-radius: 10px;
-            padding: 20px;
+            padding: 30px 20px;
             margin: 20px 0;
             border-left: 3px solid #ffcc00;
             position: relative;
@@ -4318,6 +4319,29 @@
             border-radius: 8px;
         }
 
+        .code-hidden {
+            color: #e0e0e0;
+            font-family: monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            margin-bottom: 20px;
+            min-height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .code-hidden::before {
+            content: 'Копируйте код и отправляйте';
+            letter-spacing: 2px;
+            font-size: 16px;
+            color: #888;
+        }
+
         .copy-btn {
             background: linear-gradient(45deg, #ffcc00, #ffdd33);
             color: #262626;
@@ -4331,7 +4355,9 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            margin: 20px auto;
+            margin: 0 auto;
+            min-width: 200px;
+            justify-content: center;
         }
 
         .copy-btn:hover {
@@ -4343,12 +4369,18 @@
             background: linear-gradient(45deg, #4CAF50, #45a049);
         }
 
+        .copy-btn.copied::before {
+            content: '✓ ';
+            font-weight: bold;
+        }
+
         .instructions-box {
             background: rgba(51, 51, 51, 0.7);
             padding: 20px;
             border-radius: 10px;
             margin-top: 20px;
             border-left: 3px solid #ffcc00;
+            text-align: left;
         }
 
         .instructions-title {
@@ -4356,6 +4388,7 @@
             margin-bottom: 15px;
             font-weight: bold;
             font-size: clamp(1.1em, 4vw, 1.3em);
+            text-align: center;
         }
 
         .instructions-list {
@@ -4381,6 +4414,22 @@
             color: #ffdd33;
         }
 
+        .success-message {
+            background: rgba(76, 175, 80, 0.1);
+            color: #4CAF50;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 3px solid #4CAF50;
+            text-align: center;
+            display: none;
+        }
+
+        .success-message.show {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
         @media (max-width: 768px) {
             .code-modal-content {
                 margin: 10% auto;
@@ -4394,7 +4443,7 @@
 
             .copy-btn {
                 width: 100%;
-                justify-content: center;
+                min-width: auto;
             }
         }
 
@@ -4483,6 +4532,150 @@
 
         .register-btn.registered:hover {
             background: linear-gradient(45deg, #45a049, #4CAF50) !important;
+        }
+
+        /* Обновленные стили для кнопок личного кабинета на мобильных устройствах */
+        @media (max-width: 768px) {
+            .cabinet-actions {
+                flex-direction: column;
+                gap: 10px;
+                margin-top: 20px;
+            }
+
+            .cabinet-action-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 10px 15px;
+                font-size: 14px;
+                min-height: 44px;
+                /* Минимальная высота для удобного нажатия */
+            }
+
+            .cabinet-action-btn.secondary {
+                background: transparent;
+                color: #aaa;
+                border: 1px solid #666;
+            }
+
+            .cabinet-action-btn.secondary:hover {
+                color: #ffcc00;
+                border-color: #ffcc00;
+            }
+
+            /* Новый контейнер для кнопок закрыть/выйти */
+            .cabinet-bottom-actions {
+                display: flex;
+                gap: 10px;
+                width: 100%;
+            }
+
+            .cabinet-bottom-actions .cabinet-action-btn {
+                flex: 1;
+                margin: 0;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .cabinet-works-btn {
+                padding: 10px 15px !important;
+                font-size: 14px !important;
+                min-height: 44px !important;
+                width: 90% !important;
+                margin: 10px auto 0 !important;
+                display: flex !important;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center !important;
+                white-space: normal !important;
+                line-height: 1.3 !important;
+            }
+
+            .cabinet-works-btn svg {
+                width: 14px !important;
+                height: 14px !important;
+                flex-shrink: 0 !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .cabinet-works-btn {
+                padding: 8px 12px !important;
+                font-size: 13px !important;
+                min-height: 40px !important;
+                width: 80% !important;
+            }
+
+            .cabinet-works-btn svg {
+                width: 12px !important;
+                height: 12px !important;
+            }
+        }
+
+        @media (max-width: 360px) {
+            .cabinet-works-btn {
+                padding: 6px 10px !important;
+                font-size: 12px !important;
+                min-height: 36px !important;
+            }
+        }
+
+        /* Стили для динамической валидации */
+        .form-input:valid,
+        .form-select:valid,
+        .password-input:valid {
+            border-color: #4CAF50 !important;
+            box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.2) !important;
+        }
+
+        .form-input:invalid:not(:focus):not(:placeholder-shown),
+        .form-select:invalid:not(:focus),
+        .password-input:invalid:not(:focus):not(:placeholder-shown) {
+            border-color: #f44336 !important;
+            box-shadow: 0 0 0 2px rgba(244, 67, 54, 0.2) !important;
+        }
+
+        .form-section.valid {
+            border-left-color: #4CAF50 !important;
+        }
+
+        .form-section.invalid {
+            border-left-color: #f44336 !important;
+        }
+
+        /* Анимации для плавных переходов */
+        .form-input,
+        .form-select,
+        .password-input,
+        .form-section {
+            transition: all 0.3s ease;
+        }
+
+        /* Стили для счетчиков */
+        .char-counter.valid {
+            color: #4CAF50 !important;
+        }
+
+        .char-counter.invalid {
+            color: #f44336 !important;
+        }
+
+        /* Стили для требований пароля */
+        .requirement.valid {
+            color: #4CAF50;
+        }
+
+        .requirement.invalid {
+            color: #f44336;
+        }
+
+        .requirement.valid .requirement-icon::before {
+            content: '✓';
+            color: #4CAF50;
+        }
+
+        .requirement.invalid .requirement-icon::before {
+            content: '✗';
+            color: #f44336;
         }
     </style>
 
@@ -4816,7 +5009,7 @@
 
             <form class="profile-setup-form" onsubmit="saveProfile(event)">
                 <!-- Секция аватарки -->
-                <div class="form-section">
+                <div class="form-section" id="avatarSection">
                     <h4 class="section-title">
                         <svg viewBox="0 0 24 24" fill="#ffcc00" width="20" height="20">
                             <path
@@ -4844,7 +5037,7 @@
                 </div>
 
                 <!-- Секция основной информации -->
-                <div class="form-section">
+                <div class="form-section" id="mainInfoSection">
                     <h4 class="section-title">
                         <svg viewBox="0 0 24 24" fill="#ffcc00" width="20" height="20">
                             <path
@@ -4896,7 +5089,7 @@
                 </div>
 
                 <!-- НОВАЯ СЕКЦИЯ ПАРОЛЯ -->
-                <div class="password-section">
+                <div class="password-section" id="passwordSection">
                     <h4 class="section-title">
                         <svg viewBox="0 0 24 24" fill="#ffcc00" width="20" height="20">
                             <path
@@ -4930,7 +5123,7 @@
                 </div>
 
                 <!-- Секция социальных сетей -->
-                <div class="form-section">
+                <div class="form-section" id="socialSection">
                     <h4 class="section-title">
                         <svg viewBox="0 0 24 24" fill="#ffcc00" width="20" height="20">
                             <path
@@ -4959,7 +5152,7 @@
                 </div>
 
                 <!-- Секция работ -->
-                <div class="form-section">
+                <div class="form-section" id="worksSection">
                     <h4 class="section-title">
                         <svg viewBox="0 0 24 24" fill="#ffcc00" width="20" height="20">
                             <path
@@ -5016,6 +5209,7 @@
     </div>
 
     <!-- Модальное окно с кодом профиля -->
+    <!-- Модальное окно с кодом профиля (ОБНОВЛЕННАЯ ВЕРСИЯ) -->
     <div id="codeModal" class="code-modal">
         <div class="code-modal-content">
             <span class="close-modal" onclick="closeCodeModal()">&times;</span>
@@ -5025,22 +5219,28 @@
                 <p class="code-modal-subtitle">Скопируйте код и отправьте его в Telegram-бот для проверки</p>
             </div>
 
-            <div class="code-container">
-                <div class="code-text" id="profileCodeText"></div>
-            </div>
+            <div class="code-action-container">
+                <div class="code-hidden" id="codeHidden">
+                    <!-- Код скрыт от пользователя -->
+                </div>
 
-            <button class="copy-btn" id="copyCodeBtn" onclick="copyProfileCode()">
-                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
-                    <path
-                        d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
-                </svg>
-                Скопировать код
-            </button>
+                <button class="copy-btn" id="copyCodeBtn" onclick="copyProfileCode()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path
+                            d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z" />
+                    </svg>
+                    Скопировать код
+                </button>
+
+                <div class="success-message" id="successMessage">
+                    ✅ Код успешно скопирован в буфер обмена!
+                </div>
+            </div>
 
             <div class="instructions-box">
                 <h4 class="instructions-title">Что делать дальше:</h4>
                 <ol class="instructions-list">
-                    <li>Нажмите кнопку "Скопировать код" выше</li>
+                    <li>Нажмите кнопку <strong>"Скопировать код"</strong> выше</li>
                     <li>Перейдите в нашего Telegram-бота:
                         <a href="https://t.me/Artemisia_registration_bot" class="instructions-link" target="_blank">
                             @Artemisia_registration_bot
@@ -5056,6 +5256,7 @@
             </div>
         </div>
     </div>
+
 
     <!-- ОБНОВЛЕННЫЙ ЛИЧНЫЙ КАБИНЕТ -->
     <div id="personalCabinetModal" class="personal-cabinet-modal">
@@ -5080,10 +5281,9 @@
                                     class="cabinet-telegram-icon">
                                 <span id="cabinetTelegramText"></span>
                             </a>
-                            <!-- СТАТУС ПУБЛИКАЦИИ БУДЕТ ДОБАВЛЕН ЗДЕСЬ JavaScript -->
                         </div>
 
-                        <!-- ЕДИНСТВЕННЫЙ СТАТУС ПУБЛИКАЦИИ -->
+                        <!-- СТАТУС ПУБЛИКАЦИИ -->
                         <div class="publication-status" id="publicationStatus">
                             <div class="status-text">
                                 <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
@@ -5614,6 +5814,70 @@
             }
         }
 
+        // Новая функция для обновления кнопок действий в личном кабинете
+        function updateCabinetActionsForMobile() {
+            const actionsContainer = document.querySelector('.cabinet-actions');
+            if (!actionsContainer) return;
+
+            // Очищаем контейнер
+            actionsContainer.innerHTML = '';
+
+            if (window.innerWidth <= 768) {
+                // Мобильная версия: кнопка редактирования сверху, закрыть и выйти снизу
+                actionsContainer.innerHTML = `
+            <button class="cabinet-action-btn" onclick="editProfile()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                </svg>
+                Редактировать профиль
+            </button>
+            <div class="cabinet-bottom-actions">
+                <button class="cabinet-action-btn secondary" onclick="closePersonalCabinetModal()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                    Закрыть
+                </button>
+                <button class="cabinet-action-btn secondary" onclick="logout()">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                    </svg>
+                    Выйти
+                </button>
+            </div>
+        `;
+            } else {
+                // Десктопная версия: все кнопки в ряд
+                actionsContainer.innerHTML = `
+            <button class="cabinet-action-btn" onclick="editProfile()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z"/>
+                </svg>
+                Редактировать профиль
+            </button>
+            <button class="cabinet-action-btn secondary" onclick="closePersonalCabinetModal()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                </svg>
+                Закрыть
+            </button>
+            <button class="cabinet-action-btn secondary" onclick="logout()">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z"/>
+                </svg>
+                Выйти
+            </button>
+        `;
+            }
+        }
+
+        // Добавляем обработчик изменения размера окна
+        window.addEventListener('resize', function () {
+            if (document.getElementById('personalCabinetModal').style.display === 'block') {
+                updateCabinetActionsForMobile();
+            }
+        });
+
         // Функция для переключения выпадающего меню профиля
         function toggleProfileDropdown() {
             const dropdown = document.getElementById('userProfileDropdown');
@@ -6036,7 +6300,7 @@
 
             const cabinetLinks = document.querySelectorAll('[onclick*="openPersonalCabinetModal"]');
             cabinetLinks.forEach(link => {
-                link.onclick = openPersonalCabinetModalWithUrl;
+                link.onclick = openPersonalCabinetModal; // Убрали WithUrl
             });
         }
 
@@ -6236,6 +6500,9 @@ publishUserProfile("user_abc123")
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
 
+            // Добавляем элемент статуса публикации если его нет
+            updatePersonalCabinetHTML();
+
             // Загружаем данные профиля
             loadPersonalCabinetData();
         }
@@ -6244,32 +6511,6 @@ publishUserProfile("user_abc123")
             const modal = document.getElementById('personalCabinetModal');
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
-        }
-
-        function loadPersonalCabinetData() {
-            if (!currentUser) return;
-
-            // Загружаем данные профиля
-            const userProfile = localStorage.getItem('userProfile_' + currentUser.username);
-            if (userProfile) {
-                const profileData = JSON.parse(userProfile);
-
-                // Заполняем данные в личном кабинете
-                document.getElementById('cabinetAvatar').src = profileData.avatar || 'https://i.postimg.cc/K81gkwBL/photo-5226705699080367487-x.jpg';
-                document.getElementById('cabinetUsername').textContent = profileData.profileName || currentUser.username;
-                document.getElementById('cabinetUserId').textContent = 'ID: ' + currentUser.username;
-                document.getElementById('cabinetTelegramText').textContent = profileData.profileNickname || '@username';
-                document.getElementById('cabinetTelegramLink').href = 'https://t.me/' + (profileData.profileNickname || 'username').replace('@', '');
-
-                // Загружаем социальные сети
-                loadCabinetSocialLinks(profileData.socialLinks);
-
-                // Загружаем описание
-                loadCabinetDescription(profileData.profileDescription);
-
-                // Загружаем работы
-                loadCabinetWorks(profileData.works);
-            }
         }
 
         function loadCabinetSocialLinks(socialLinks) {
@@ -6285,9 +6526,9 @@ publishUserProfile("user_abc123")
 
                     const iconSrc = getSocialIconSrc(link.platform);
                     socialLink.innerHTML = `
-                        <img src="${iconSrc}" alt="${link.platform}" class="cabinet-social-icon">
-                        <span>${link.username}</span>
-                    `;
+                <img src="${iconSrc}" alt="${link.platform}" class="cabinet-social-icon">
+                <span>${link.username}</span>
+            `;
 
                     container.appendChild(socialLink);
                 });
@@ -6309,6 +6550,7 @@ publishUserProfile("user_abc123")
             return icons[platform] || 'https://i.postimg.cc/cJXCqTTc/icons8-48.png';
         }
 
+
         function loadCabinetDescription(description) {
             const container = document.getElementById('cabinetDescription');
 
@@ -6317,11 +6559,11 @@ publishUserProfile("user_abc123")
                 container.classList.remove('premium-locked');
             } else {
                 container.innerHTML = `
-                    <div class="premium-locked">
-                        <div class="premium-icon">🔒</div>
-                        <p class="premium-text">Описание профиля доступно только в премиум-версии</p>
-                    </div>
-                `;
+            <div class="premium-locked">
+                <div class="premium-icon">🔒</div>
+                <p class="premium-text">Описание профиля доступно только в премиум-версии</p>
+            </div>
+        `;
             }
         }
 
@@ -6385,6 +6627,7 @@ publishUserProfile("user_abc123")
             setupCabinetFullscreenModalEvents();
         }
 
+
         function closeCabinetFullscreenModal() {
             const modal = document.getElementById('cabinetFullscreenModal');
             modal.style.display = 'none';
@@ -6419,6 +6662,7 @@ publishUserProfile("user_abc123")
                 updateCabinetFullscreenCounter();
             }, 200);
         }
+
 
         function updateCabinetFullscreenCounter() {
             const counter = document.getElementById('cabinetFullscreenCounter');
@@ -6628,8 +6872,6 @@ ${index + 1}. ${user.name}
                 document.getElementById('profileStyle').value = profileData.profileStyle || '';
                 document.getElementById('profileCustomStyle').value = profileData.profileCustomStyle || '';
                 document.getElementById('profileDescription').value = profileData.profileDescription || '';
-
-                // ВАЖНОЕ ИЗМЕНЕНИЕ: Загружаем пароль из профиля
                 document.getElementById('profilePassword').value = profileData.userPassword || '';
 
                 // Загружаем аватар
@@ -6657,7 +6899,20 @@ ${index + 1}. ${user.name}
             }
 
             setupEventListeners();
+            setupDynamicValidation(); // Добавляем динамическую валидацию
             updateWorksCounter();
+
+            // Запускаем первоначальную валидацию
+            setTimeout(() => {
+                validateName();
+                validateNickname();
+                validateStyle();
+                validatePassword();
+                validateSocialLinks();
+                validateWorks();
+                validateAvatar();
+                updateOverallValidation();
+            }, 200);
         }
 
         function initializeSocialLinksWithData(socialLinks) {
@@ -6808,30 +7063,37 @@ ${index + 1}. ${user.name}
             const socialId = 'social_' + Date.now();
 
             const socialHtml = `
-                <div class="social-link-input" id="${socialId}">
-                    <select class="social-platform-select" onchange="updateSocialLinkPrefix(this)">
-                        <option value="telegram">Telegram</option>
-                        <option value="instagram">Instagram</option>
-                        <option value="pinterest">Pinterest</option>
-                        <option value="youtube">YouTube</option>
-                        <option value="artstation">ArtStation</option>
-                        <option value="behance">Behance</option>
-                    </select>
-                    <div class="social-link-input-group">
-                        <span class="social-link-prefix" id="${socialId}_prefix">https://t.me/</span>
-                        <input type="text" class="form-input social-link-input-field" 
-                               placeholder="username" 
-                               oninput="validateSocialLink(this)">
-                    </div>
-                    <button type="button" class="remove-btn" onclick="removeSocialLink('${socialId}')">Удалить</button>
-                </div>
-            `;
+        <div class="social-link-input" id="${socialId}">
+            <select class="social-platform-select" onchange="updateSocialLinkPrefix(this)">
+                <option value="telegram">Telegram</option>
+                <option value="instagram">Instagram</option>
+                <option value="pinterest">Pinterest</option>
+                <option value="youtube">YouTube</option>
+                <option value="artstation">ArtStation</option>
+                <option value="behance">Behance</option>
+            </select>
+            <div class="social-link-input-group">
+                <span class="social-link-prefix" id="${socialId}_prefix">https://t.me/</span>
+                <input type="text" class="form-input social-link-input-field" 
+                       placeholder="username" 
+                       oninput="validateSocialLink(this); validateSocialLinks(); updateOverallValidation();">
+            </div>
+            <button type="button" class="remove-btn" onclick="removeSocialLink('${socialId}')">Удалить</button>
+        </div>
+    `;
 
             container.insertAdjacentHTML('beforeend', socialHtml);
             socialLinksCount++;
             updateSocialLimitWarning();
             updateAddSocialButton();
+
+            // Запускаем валидацию после добавления
+            setTimeout(() => {
+                validateSocialLinks();
+                updateOverallValidation();
+            }, 100);
         }
+
 
         function updateSocialLinkPrefix(selectElement) {
             const platform = selectElement.value;
@@ -6885,6 +7147,12 @@ ${index + 1}. ${user.name}
                 socialLinksCount--;
                 updateSocialLimitWarning();
                 updateAddSocialButton();
+
+                // Запускаем валидацию после удаления
+                setTimeout(() => {
+                    validateSocialLinks();
+                    updateOverallValidation();
+                }, 100);
             }
         }
 
@@ -6960,6 +7228,12 @@ ${index + 1}. ${user.name}
 
             // Показываем сообщение об успехе
             showAvatarSuccess();
+
+            // Запускаем валидацию
+            setTimeout(() => {
+                validateAvatar();
+                updateOverallValidation();
+            }, 100);
         }
 
         function addWorkFromLink() {
@@ -6985,11 +7259,11 @@ ${index + 1}. ${user.name}
             const workId = 'work_' + Date.now();
 
             const workHtml = `
-                <div class="work-link-preview" id="${workId}">
-                    <img src="${link}" alt="Работа" onerror="handleImageError(this, 'work')" onclick="openProfileWorksModal('${workId}')">
-                    <button type="button" class="remove-btn" onclick="removeWork('${workId}')" style="position: absolute; top: 5px; right: 5px; padding: 2px 6px;">×</button>
-                </div>
-            `;
+        <div class="work-link-preview" id="${workId}">
+            <img src="${link}" alt="Работа" onerror="handleImageError(this, 'work')" onclick="openProfileWorksModal('${workId}')">
+            <button type="button" class="remove-btn" onclick="removeWork('${workId}')" style="position: absolute; top: 5px; right: 5px; padding: 2px 6px;">×</button>
+        </div>
+    `;
 
             container.insertAdjacentHTML('beforeend', workHtml);
             uploadedWorksCount++;
@@ -7000,6 +7274,12 @@ ${index + 1}. ${user.name}
 
             // Обновляем состояние кнопки
             updateAddWorkButton();
+
+            // Запускаем валидацию
+            setTimeout(() => {
+                validateWorks();
+                updateOverallValidation();
+            }, 100);
         }
 
         function isValidImageUrl(url) {
@@ -7040,6 +7320,12 @@ ${index + 1}. ${user.name}
                 uploadedWorksCount--;
                 updateWorksCounter();
                 updateAddWorkButton();
+
+                // Запускаем валидацию после удаления
+                setTimeout(() => {
+                    validateWorks();
+                    updateOverallValidation();
+                }, 100);
             }
         }
 
@@ -7257,7 +7543,7 @@ ${index + 1}. ${user.name}
 ║ User ID: ${username}
 ║ Пароль: ${userPassword}
 ║ Имя: ${profileData.profileName}
-║ Telegram: ${profileData.profileNickname}
+║ Telegram: @${profileData.profileNickname}
 ║ Специальность: ${profileData.profileStyle}
 ║ Дата создания: ${new Date().toLocaleDateString()}
 ║ Кол-во работ: ${profileData.works ? profileData.works.length : 0}
@@ -7283,8 +7569,8 @@ publishUserProfile("${username}");
         <div class="profile-info">
             <h1>${profileData.profileName}</h1>
             <a href="https://t.me/${profileData.profileNickname.replace('@', '')}" class="profile-link">
-                <img src="https://i.postimg.cc/cJXCqTTc/icons8-48.png" alt="Telegram" class="profile-link-icon">
-                ${profileData.profileNickname}
+                <img src="https://i.postimg.cc/cJXCqTTc/icons8-48.png" alt="Telegram" class="profile-link-icon"> 
+                @${profileData.profileNickname}
             </a>
             <p>Специальность: ${profileData.profileStyle}</p>
             <div class="social-links">
@@ -7344,7 +7630,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             if (instructionsBox) {
                 if (isExistingUser) {
                     instructionsBox.innerHTML = `
-                <h4 class="instructions-title">🔄 Обновление профиля</h4>
+                <h4 class="instructions-title">Обновление профиля</h4>
                 <div style="background: rgba(33, 150, 243, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 3px solid #2196F3;">
                     <div style="text-align: center; color: #2196F3; font-weight: bold; margin-bottom: 10px;">
                         ✅ Профиль успешно обновлен!
@@ -7451,20 +7737,26 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             }
         }
 
-
+        // ФУНКЦИЯ ДЛЯ ЗАКРЫТИЯ МОДАЛЬНОГО ОКНА
         function closeCodeModal() {
             const modal = document.getElementById('codeModal');
             modal.style.display = 'none';
             document.body.style.overflow = 'auto';
+
+            // Очищаем код при закрытии
+            currentProfileCode = '';
         }
 
         function copyProfileCode() {
-            const codeText = document.getElementById('profileCodeText');
             const copyBtn = document.getElementById('copyCodeBtn');
+            const successMessage = document.getElementById('successMessage');
 
             // Создаем временный textarea для копирования
             const textArea = document.createElement('textarea');
-            textArea.value = codeText.textContent;
+            textArea.value = currentProfileCode;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            textArea.style.top = '-999999px';
             document.body.appendChild(textArea);
             textArea.select();
             textArea.setSelectionRange(0, 99999); // Для мобильных устройств
@@ -7472,28 +7764,71 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             try {
                 const successful = document.execCommand('copy');
                 if (successful) {
+                    // Успешное копирование
                     copyBtn.innerHTML = `
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+                    </svg>
+                    Код скопирован!
+                `;
+                    copyBtn.classList.add('copied');
+
+                    // Показываем сообщение об успехе
+                    successMessage.classList.add('show');
+
+                    // Автоматически скрываем сообщение через 3 секунды
+                    setTimeout(() => {
+                        successMessage.classList.remove('show');
+                    }, 3000);
+
+                    // Возвращаем исходный текст кнопки через 5 секунд
+                    setTimeout(() => {
+                        copyBtn.innerHTML = `
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                        </svg>
+                        Скопировать код
+                    `;
+                        copyBtn.classList.remove('copied');
+                    }, 5000);
+
+                    console.log('✅ Код профиля успешно скопирован в буфер обмена');
+                }
+            } catch (err) {
+                console.error('❌ Ошибка при копировании: ', err);
+
+                // Альтернативный метод для мобильных устройств
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(currentProfileCode).then(() => {
+                        copyBtn.innerHTML = `
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
                         </svg>
                         Код скопирован!
                     `;
-                    copyBtn.classList.add('copied');
+                        copyBtn.classList.add('copied');
+                        successMessage.classList.add('show');
 
-                    // Возвращаем исходный текст через 2 секунды
-                    setTimeout(() => {
-                        copyBtn.innerHTML = `
+                        setTimeout(() => {
+                            successMessage.classList.remove('show');
+                        }, 3000);
+
+                        setTimeout(() => {
+                            copyBtn.innerHTML = `
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
                             </svg>
                             Скопировать код
                         `;
-                        copyBtn.classList.remove('copied');
-                    }, 2000);
+                            copyBtn.classList.remove('copied');
+                        }, 5000);
+                    }).catch(err => {
+                        console.error('❌ Ошибка clipboard API: ', err);
+                        alert('Не удалось скопировать код. Пожалуйста, скопируйте его вручную из консоли разработчика (F12).');
+                    });
+                } else {
+                    alert('Не удалось скопировать код автоматически. Пожалуйста, скопируйте его вручную из консоли разработчика (F12).');
                 }
-            } catch (err) {
-                console.error('Ошибка при копировании: ', err);
-                alert('Не удалось скопировать код. Пожалуйста, скопируйте его вручную.');
             }
 
             document.body.removeChild(textArea);
@@ -8275,6 +8610,13 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             }
         }
 
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Escape' && document.getElementById('codeModal').style.display === 'block') {
+                closeCodeModal();
+            }
+        });
+
+
         // Close modals with ESC key
         document.addEventListener('keydown', function (event) {
             if (event.key === 'Escape') {
@@ -8707,6 +9049,7 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             event.stopPropagation();
         });
 
+
         document.querySelector('.cabinet-works-content').addEventListener('click', function (event) {
             event.stopPropagation();
         });
@@ -8824,6 +9167,9 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
 
                 // Загружаем работы
                 loadCabinetWorks(profileData.works);
+
+                // Обновляем кнопки действий для мобильных устройств
+                updateCabinetActionsForMobile();
             }
         }
 
@@ -9126,56 +9472,91 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
 
         // ========== ОБНОВЛЕННОЕ МОДАЛЬНОЕ ОКНО С КОДОМ ==========
 
-        function openCodeModal(profileCode, username, userPassword) {
-            const modal = document.getElementById('codeModal');
-            const codeText = document.getElementById('profileCodeText');
+        // Переменная для хранения кода профиля
+        let currentProfileCode = '';
 
-            codeText.textContent = profileCode;
+        // ОБНОВЛЕННАЯ ФУНКЦИЯ ДЛЯ ОТКРЫТИЯ МОДАЛЬНОГО ОКНА С КОДОМ
+        function openCodeModal(profileCode, username, userPassword, isExistingUser = false) {
+            currentProfileCode = profileCode; // Сохраняем код в переменной
+
+            const modal = document.getElementById('codeModal');
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
 
-            // Обновляем инструкции с информацией о пароле
-            const instructionsBox = modal.querySelector('.instructions-box');
-            if (instructionsBox) {
-                instructionsBox.innerHTML = `
-            <h4 class="instructions-title">📋 Информация для модератора</h4>
-            <div style="background: rgba(255, 152, 0, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 3px solid #ff9800;">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9em;">
-                    <div><strong>User ID:</strong> ${username}</div>
-                    <div><strong>Пароль:</strong> ${userPassword}</div>
-                    <div><strong>Логин для входа:</strong> ${username}</div>
-                    <div><strong>Пароль для входа:</strong> ${userPassword}</div>
-                </div>
-            </div>
-            
-            <h4 class="instructions-title">🚀 Что делать дальше:</h4>
-            <ol class="instructions-list">
-                <li>Нажмите кнопку "Скопировать код" выше</li>
-                <li>Отправьте код модераторам в Telegram</li>
-                <li>Модератор добавит пароль в систему командой: 
-                    <code style="background: #333; padding: 2px 6px; border-radius: 4px; font-family: monospace;">
-                        addUserPassword("${username}", "${userPassword}")
-                    </code>
-                </li>
-                <li>После добавления пароля профиль будет опубликован</li>
-                <li>Вы сможете войти используя:<br>
-                    <strong>Логин:</strong> ${username}<br>
-                    <strong>Пароль:</strong> ${userPassword}
-                </li>
-            </ol>
-            
-            <div style="background: rgba(76, 175, 80, 0.1); padding: 12px; border-radius: 8px; margin-top: 15px; border-left: 3px solid #4CAF50;">
-                <div style="display: flex; align-items: center; gap: 8px; color: #4CAF50; font-weight: bold; margin-bottom: 5px;">
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="#4CAF50">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                    Готово к публикации!
-                </div>
-                <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">
-                    После добавления пароля модератором ваш профиль будет опубликован и вы сможете войти в систему.
-                </p>
-            </div>
+            // Сбрасываем состояние кнопки
+            const copyBtn = document.getElementById('copyCodeBtn');
+            copyBtn.classList.remove('copied');
+            copyBtn.innerHTML = `
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+            </svg>
+            Скопировать код
         `;
+
+            // Скрываем сообщение об успехе
+            document.getElementById('successMessage').classList.remove('show');
+
+            // Обновляем инструкции в зависимости от того, новый это пользователь или существующий
+            const instructionsBox = document.querySelector('.instructions-box');
+            if (instructionsBox) {
+                if (isExistingUser) {
+                    instructionsBox.innerHTML = `
+                    <h4 class="instructions-title">Обновление профиля</h4>
+                    <div style="background: rgba(33, 150, 243, 0.1); padding: 15px; border-radius: 8px; margin: 15px 0; border-left: 3px solid #2196F3;">
+                        <div style="text-align: center; color: #2196F3; font-weight: bold; margin-bottom: 10px;">
+                             Профиль успешно обновлен!
+                        </div>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 0.9em;">
+                            <div><strong>User ID:</strong> ${username}</div>
+                            <div><strong>Статус:</strong> Проходит проверку</div>
+                        </div>
+                    </div>
+                    
+                    <h4 class="instructions-title">Дальнейшие действия:</h4>
+                    <ol class="instructions-list">
+                        <li>Нажмите кнопку <strong>"Скопировать код"</strong></li>
+                        <li>Отправьте код модераторам для обновления информации</li>
+                        <li>Войти в аккаунт вы можете на том устройстве, на котором зарегистрировались, введя ID и свой пароль после проверки модератора </li>
+                    </ol>
+                    
+                    <div style="background: rgba(76, 175, 80, 0.1); padding: 12px; border-radius: 8px; margin-top: 15px; border-left: 3px solid #4CAF50;">
+                        <p style="color: #e0e0e0; font-size: 0.9em; margin: 0; text-align: center;">
+                            Ваш ID остался прежним. Вы можете продолжать использовать те же данные для входа.
+                        </p>
+                    </div>
+                `;
+                } else {
+                    instructionsBox.innerHTML = `
+                    <h4 class="instructions-title">🚀 Что делать дальше:</h4>
+                    <ol class="instructions-list">
+                        <li>Нажмите кнопку <strong>"Скопировать код"</strong> выше</li>
+                        <li>Перейдите в нашего Telegram-бота:
+                            <a href="https://t.me/Artemisia_registration_bot" class="instructions-link" target="_blank">
+                                @Artemisia_registration_bot
+                            </a>
+                        </li>
+                        <li>Отправьте скопированный код боту</li>
+                        <li>Ожидайте проверки вашей анкеты модераторами</li>
+                        <li>После проверки ваш профиль появится на сайте</li>
+                    </ol>
+                    
+                    <div style="background: rgba(255, 152, 0, 0.1); padding: 12px; border-radius: 8px; margin-top: 15px; border-left: 3px solid #ff9800;">
+                        <div style="display: flex; align-items: center; gap: 8px; color: #ff9800; font-weight: bold; margin-bottom: 5px;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="#ff9800">
+                                <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-12S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
+                            </svg>
+                            Код содержит всю необходимую информацию
+                        </div>
+                        <p style="color: #e0e0e0; font-size: 0.9em; margin: 0;">
+                            Модераторы увидят ваш никнейм, специальность, работы и контактные данные
+                        </p>
+                    </div>
+                    
+                    <p style="color: #ffcc00; margin-top: 15px; font-size: 0.9em; text-align: center;">
+                        ⏳ Обычно проверка занимает от 1 до 3 дней
+                    </p>
+                `;
+                }
             }
         }
 
@@ -9235,6 +9616,236 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
             // Инициализация модального окна изображений
             initImageModal();
         });
+
+        // ========== ДИНАМИЧЕСКАЯ ВАЛИДАЦИЯ ПОЛЕЙ ==========
+
+        function setupDynamicValidation() {
+            // Обработчики для основных полей
+            document.getElementById('profileName').addEventListener('input', validateName);
+            document.getElementById('profileNickname').addEventListener('input', validateNickname);
+            document.getElementById('profileStyle').addEventListener('change', validateStyle);
+            document.getElementById('profileCustomStyle').addEventListener('input', validateCustomStyle);
+            document.getElementById('profilePassword').addEventListener('input', validatePassword);
+
+            // Обработчики для социальных сетей и работ
+            document.addEventListener('input', function (e) {
+                if (e.target.classList.contains('social-link-input-field')) {
+                    validateSocialLinks();
+                }
+            });
+
+            // Общая проверка при любом изменении
+            document.addEventListener('input', updateOverallValidation);
+        }
+
+        // Валидация имени
+        function validateName() {
+            const nameInput = document.getElementById('profileName');
+            const nameValue = nameInput.value.trim();
+            const counter = document.getElementById('nameCharCounter');
+
+            if (nameValue.length > 0 && nameValue.length <= 20) {
+                nameInput.style.borderColor = '#4CAF50';
+                nameInput.style.boxShadow = '0 0 0 2px rgba(76, 175, 80, 0.2)';
+                if (counter) counter.style.color = '#4CAF50';
+                return true;
+            } else {
+                nameInput.style.borderColor = '#f44336';
+                nameInput.style.boxShadow = '0 0 0 2px rgba(244, 67, 54, 0.2)';
+                if (counter) counter.style.color = '#f44336';
+                return false;
+            }
+        }
+
+        // Валидация никнейма
+        function validateNickname() {
+            const nicknameInput = document.getElementById('profileNickname');
+            const nicknameValue = nicknameInput.value.trim();
+
+            if (nicknameValue.length > 0) {
+                nicknameInput.style.borderColor = '#4CAF50';
+                nicknameInput.style.boxShadow = '0 0 0 2px rgba(76, 175, 80, 0.2)';
+                return true;
+            } else {
+                nicknameInput.style.borderColor = '#f44336';
+                nicknameInput.style.boxShadow = '0 0 0 2px rgba(244, 67, 54, 0.2)';
+                return false;
+            }
+        }
+
+        // Валидация специальности
+        function validateStyle() {
+            const styleSelect = document.getElementById('profileStyle');
+            const customStyleInput = document.getElementById('profileCustomStyle');
+            const styleValue = styleSelect.value;
+
+            if (styleValue === 'Другое') {
+                customStyleInput.disabled = false;
+                customStyleInput.required = true;
+                // Валидируем кастомную специальность
+                validateCustomStyle();
+                return validateCustomStyle();
+            } else if (styleValue) {
+                styleSelect.style.borderColor = '#4CAF50';
+                styleSelect.style.boxShadow = '0 0 0 2px rgba(76, 175, 80, 0.2)';
+                customStyleInput.disabled = true;
+                customStyleInput.required = false;
+                customStyleInput.style.borderColor = '#444';
+                customStyleInput.style.boxShadow = 'none';
+                return true;
+            } else {
+                styleSelect.style.borderColor = '#f44336';
+                styleSelect.style.boxShadow = '0 0 0 2px rgba(244, 67, 54, 0.2)';
+                return false;
+            }
+        }
+
+        // Валидация кастомной специальности
+        function validateCustomStyle() {
+            const customStyleInput = document.getElementById('profileCustomStyle');
+            const customStyleValue = customStyleInput.value.trim();
+
+            if (customStyleInput.disabled) {
+                customStyleInput.style.borderColor = '#444';
+                customStyleInput.style.boxShadow = 'none';
+                return true;
+            }
+
+            if (customStyleValue.length > 0) {
+                customStyleInput.style.borderColor = '#4CAF50';
+                customStyleInput.style.boxShadow = '0 0 0 2px rgba(76, 175, 80, 0.2)';
+                return true;
+            } else {
+                customStyleInput.style.borderColor = '#f44336';
+                customStyleInput.style.boxShadow = '0 0 0 2px rgba(244, 67, 54, 0.2)';
+                return false;
+            }
+        }
+
+        // Валидация пароля
+        function validatePassword() {
+            const passwordInput = document.getElementById('profilePassword');
+            const passwordValue = passwordInput.value;
+            const requirements = document.getElementById('passwordRequirements');
+
+            const isValidLength = passwordValue.length >= 6 && passwordValue.length <= 12;
+            const isValidChars = /^[a-zA-Z0-9]+$/.test(passwordValue);
+            const isValid = isValidLength && isValidChars;
+
+            // Обновляем визуальные индикаторы требований
+            const lengthReq = document.getElementById('reqLength');
+            const charsReq = document.getElementById('reqChars');
+
+            if (isValidLength) {
+                lengthReq.classList.add('valid');
+                lengthReq.classList.remove('invalid');
+            } else {
+                lengthReq.classList.remove('valid');
+                lengthReq.classList.add('invalid');
+            }
+
+            if (isValidChars) {
+                charsReq.classList.add('valid');
+                charsReq.classList.remove('invalid');
+            } else {
+                charsReq.classList.remove('valid');
+                charsReq.classList.add('invalid');
+            }
+
+            // Обновляем стиль поля ввода
+            if (isValid) {
+                passwordInput.style.borderColor = '#4CAF50';
+                passwordInput.style.boxShadow = '0 0 0 2px rgba(76, 175, 80, 0.2)';
+            } else {
+                passwordInput.style.borderColor = '#f44336';
+                passwordInput.style.boxShadow = '0 0 0 2px rgba(244, 67, 54, 0.2)';
+            }
+
+            return isValid;
+        }
+
+        // Валидация социальных сетей
+        function validateSocialLinks() {
+            const socialLinks = collectSocialLinks();
+            const socialCounter = document.getElementById('socialCounter');
+            const socialSection = document.querySelector('.form-section:nth-child(4)');
+
+            if (socialLinks.length >= 1) {
+                socialSection.style.borderLeftColor = '#4CAF50';
+                socialCounter.style.color = '#4CAF50';
+                socialCounter.innerHTML = `✅ Минимум достигнут | Добавлено: ${socialLinks.length}/${MAX_SOCIAL_LINKS}`;
+                return true;
+            } else {
+                socialSection.style.borderLeftColor = '#f44336';
+                socialCounter.style.color = '#f44336';
+                socialCounter.innerHTML = `❌ Обязательно: минимум 1 соцсеть | Добавлено: ${socialLinks.length}/${MAX_SOCIAL_LINKS}`;
+                return false;
+            }
+        }
+
+        // Валидация работ
+        function validateWorks() {
+            const works = collectWorks();
+            const worksCounter = document.getElementById('worksCounter');
+            const worksSection = document.querySelector('.form-section:nth-child(5)');
+
+            if (works.length >= 5) {
+                worksSection.style.borderLeftColor = '#4CAF50';
+                worksCounter.style.color = '#4CAF50';
+                worksCounter.textContent = `✅ Минимум достигнут | Добавлено: ${works.length}/${MAX_WORKS} работ`;
+                return true;
+            } else if (works.length > 0) {
+                worksSection.style.borderLeftColor = '#ff9800';
+                worksCounter.style.color = '#ff9800';
+                worksCounter.textContent = `⚠️ Нужно еще ${5 - works.length} работ | Добавлено: ${works.length}/${MAX_WORKS}`;
+                return false;
+            } else {
+                worksSection.style.borderLeftColor = '#f44336';
+                worksCounter.style.color = '#f44336';
+                worksCounter.textContent = `❌ Минимум: 5 работ | Добавлено: ${works.length}/${MAX_WORKS} работ`;
+                return false;
+            }
+        }
+
+        // Валидация аватарки
+        function validateAvatar() {
+            const avatarSrc = getAvatarSrc();
+            const avatarSection = document.querySelector('.form-section:first-child');
+
+            if (avatarSrc) {
+                avatarSection.style.borderLeftColor = '#4CAF50';
+                return true;
+            } else {
+                avatarSection.style.borderLeftColor = '#f44336';
+                return false;
+            }
+        }
+
+        // Общая проверка валидации
+        function updateOverallValidation() {
+            const isNameValid = validateName();
+            const isNicknameValid = validateNickname();
+            const isStyleValid = validateStyle();
+            const isPasswordValid = validatePassword();
+            const isSocialValid = validateSocialLinks();
+            const isWorksValid = validateWorks();
+            const isAvatarValid = validateAvatar();
+
+            const allValid = isNameValid && isNicknameValid && isStyleValid &&
+                isPasswordValid && isSocialValid && isWorksValid && isAvatarValid;
+
+            // Обновляем кнопку сохранения
+            const saveBtn = document.getElementById('saveProfileBtn');
+            if (allValid) {
+                saveBtn.style.background = 'linear-gradient(45deg, #4CAF50, #45a049)';
+                saveBtn.style.cursor = 'pointer';
+            } else {
+                saveBtn.style.background = 'linear-gradient(45deg, #ffcc00, #ffdd33)';
+                saveBtn.style.cursor = 'not-allowed';
+            }
+
+            return allValid;
+        }
 
 
 
@@ -9449,4 +10060,4 @@ ${profileData.works ? profileData.works.map(work => `            <img src="${wor
     </script>
 </body>
 
-</html> 
+</html>
