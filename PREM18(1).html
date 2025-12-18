@@ -13916,79 +13916,7 @@ ${index + 1}. ${profile.profileData.profileName}
             }, 1500);
         }
 
-        // Глобальная база данных пользователей (в реальном проекте это должно быть на сервере)
-        const userDatabase = {
-            "user_5sjr50": {
-                username: "user_5sjr50",
-                password: "123456", // Пароль для входа
-                profileName: "Дизайнер Профи",
-                profileNickname: "@designer_pro",
-                profileStyle: "Дизайн",
-                profileDescription: "Профессиональный дизайнер с 5-летним опытом работы",
-                avatar: "https://i.postimg.cc/K81gkwBL/photo-5226705699080367487-x.jpg",
-                banner: "https://i.postimg.cc/DfSNsVrN/2.png", // Пример баннера
-                socialLinks: [
-                    { platform: "telegram", username: "designer_pro" },
-                    { platform: "instagram", username: "designer_pro" }
-                ],
-                works: [
-                    "https://i.postimg.cc/DwQtzWBf/photo-5244699232638725577-y.jpg",
-                    "https://i.postimg.cc/Pf9GVnCH/photo-5244699232638725578-y.jpg"
-                ],
-                publishedOn: "design",
-                registrationDate: "2024-01-15T10:30:00.000Z",
-                lastUpdated: "2024-01-20T14:25:00.000Z",
-                profileComplete: true,
-                basicInfoLocked: true
-            },
-
-            "user_szkm93": {
-                username: "user_szkm93",
-                password: "123456",
-                profileName: "Художник Премиум",
-                profileNickname: "@prem_artist",
-                profileStyle: "Иллюстрация",
-                profileDescription: "Создаю уникальные иллюстрации в цифровом формате",
-                avatar: "https://i.postimg.cc/K81gkwBL/photo-5226705699080367487-x.jpg",
-                banner: "https://i.postimg.cc/DfSNsVrN/2.png",
-                socialLinks: [
-                    { platform: "telegram", username: "prem_artist" },
-                    { platform: "artstation", username: "prem_artist" }
-                ],
-                works: [
-                    "https://i.postimg.cc/DwQtzWBf/photo-5244699232638725577-y.jpg",
-                    "https://i.postimg.cc/Pf9GVnCH/photo-5244699232638725578-y.jpg",
-                    "https://i.postimg.cc/K81gkwBL/photo-5226705699080367487-x.jpg"
-                ],
-                publishedOn: "prem_artist",
-                registrationDate: "2024-01-10T09:15:00.000Z",
-                lastUpdated: "2024-01-18T11:45:00.000Z",
-                profileComplete: true,
-                basicInfoLocked: true,
-                isPrem: true
-            },
-
-            "user_ldoexr": {
-                username: "user_ldoexr",
-                password: "123456",
-                profileName: "Другой Художник",
-                profileNickname: "@another_artist",
-                profileStyle: "Графический дизайн",
-                profileDescription: "Специалист по графическому дизайну и брендингу",
-                avatar: "https://i.postimg.cc/K81gkwBL/photo-5226705699080367487-x.jpg",
-                socialLinks: [
-                    { platform: "telegram", username: "another_artist" },
-                    { platform: "behance", username: "another_artist" }
-                ],
-                works: [
-                    "https://i.postimg.cc/DwQtzWBf/photo-5244699232638725577-y.jpg",
-                    "https://i.postimg.cc/Pf9GVnCH/photo-5244699232638725578-y.jpg"
-                ],
-                publishedOn: "artist",
-                profileComplete: true,
-                basicInfoLocked: true
-            }
-        };
+        
 
         // Функция для получения базы данных пользователей
         function getUserDatabase() {
@@ -14235,6 +14163,8 @@ ${index + 1}. ${profile.profileData.profileName}
             console.log(`✅ Личный кабинет загружен из базы данных для: ${currentUser.username}`);
         }
     </script>
+
+    <script src="myscript.js"></script>
 </body>
 
 </html>
